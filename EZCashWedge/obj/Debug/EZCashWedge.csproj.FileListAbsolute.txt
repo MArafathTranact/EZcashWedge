@@ -1,0 +1,14 @@
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\NLog.config
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\EZCashWedge.exe.config
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\EZCashWedge.exe
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\EZCashWedge.pdb
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\NLog.dll
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\NLog.xml
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.AssemblyReference.cache
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.SuggestedBindingRedirects.cache
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.CoreCompileInputs.cache
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.CopyComplete
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.exe
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.pdb
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.xml
