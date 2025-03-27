@@ -179,15 +179,24 @@ namespace EZCashWedge
                         case var s when filter.Contains("amount"):
                             ezcashRequest.amount = decimal.Parse(split[1]);
                             break;
-                        case var s when filter.Contains("date"):
-                            ezcashRequest.date = split[1];
+                        //case var s when filter.Contains("date"): // To avoid timestamp issue in UI, removed passing date on encode call
+                        //    ezcashRequest.date = split[1];
+                        //    break;
+                        case var s when filter.Contains("cashier_id"):
+                            ezcashRequest.cashier_id = split[1];
+                            break;
+                        case var s when filter.Contains("device_id"):
+                            ezcashRequest.device_id = split[1];
+                            break;
+                        case var s when filter.Contains("payee"):
+                            ezcashRequest.payee = split[1];
                             break;
                     }
                 }
                 ezcashRequest.yard_id = _yardId;
 
                 if (string.IsNullOrWhiteSpace(ezcashRequest.payment_nbr))
-                    Logger.LogWithNoLock(" No Payment Number in command at Port {_portNumber} .");
+                    Logger.LogWithNoLock($" No Payment Number in command at Port {_portNumber} .");
 
 
                 var httpClient = new HttpClient
