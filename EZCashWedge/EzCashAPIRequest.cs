@@ -12,6 +12,9 @@ namespace EZCashWedge
         public decimal amount { get; set; }
         public string date { get; set; }
         public string yard_id { get; set; }
+        public string cashier_id { get; set; }
+        public string device_id { get; set; }
+        public string payee { get; set; }
 
     }
 }
