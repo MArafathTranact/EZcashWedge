@@ -12,3 +12,18 @@ C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.ex
 C:\Projects\Testing Application\EZCashWedge\EZCashWedge\obj\Debug\EZCashWedge.pdb
 C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.dll
 C:\Projects\Testing Application\EZCashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.xml
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\NLog.config
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\EZCashWedge.exe.config
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\EZCashWedge.exe
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\EZCashWedge.pdb
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.dll
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\NLog.dll
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\Newtonsoft.Json.xml
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Debug\NLog.xml
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.AssemblyReference.cache
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.ProjectInstaller.resources
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.GenerateResource.cache
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.csproj.CoreCompileInputs.cache
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWe.6F8452FD.Up2Date
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.exe
+C:\Arafath\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Debug\EZCashWedge.pdb

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,8 @@ namespace EZCashWedge
     {
         // Thread signal.
         public ManualResetEvent allDone = new ManualResetEvent(false);
-        private ArrayList handlerList;
+        private List<SocketHandler> handlerList;
+        private readonly object _lockObj = new object();
         private ArrayList socketList;
         private int _portNumber;
         private string _yardId;
@@ -51,7 +53,7 @@ namespace EZCashWedge
             byte[] bytes = new Byte[1024];
 
 
-            handlerList = new ArrayList();
+            handlerList = new List<SocketHandler>();
             socketList = new ArrayList();
 
             IPAddress ipAddress = IPAddress.Parse(GetAppSettingValue("Ip"));
@@ -98,6 +100,7 @@ namespace EZCashWedge
                 allDone.Set();
 
                 // Get the socket that handles the client request.
+
                 Socket listener = (Socket)ar.AsyncState;
                 Socket handler = listener.EndAccept(ar);
 
@@ -113,8 +116,12 @@ namespace EZCashWedge
                 SocketHandler socketHandler = new SocketHandler(handler, _portNumber, _yardId);
                 socketHandler.ListenClient();
 
-                handlerList.Add(socketHandler);
-                socketList.Add(handler);
+                lock (_lockObj)
+                {
+                    handlerList.Add(socketHandler);
+                }
+                Task.Run(async () => await RemoveDisposedSocketOnNewConnection());
+                //socketList.Add(handler);
             }
             catch (Exception ex)
             {
@@ -123,6 +130,24 @@ namespace EZCashWedge
 
         }
 
+        public async Task RemoveDisposedSocketOnNewConnection()
+        {
+            try
+            {
+                lock (_lockObj)
+                {
+                    lock (_lockObj)
+                    {
+                        handlerList.RemoveAll(item =>
+                            item != null && !item.handler.Connected && !item.handler.IsConnected());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.RemoveDisposedSocketOnNewConnection at port {_portNumber} : ", ex);
+            }
+        }
         public async Task StopListener()
         {
             try
@@ -131,8 +156,8 @@ namespace EZCashWedge
                 {
                     try
                     {
-                        SocketHandler handler = (SocketHandler)item;
-                        handler.DisconnectHandler();
+                        if (item.handler.Connected && item.handler.IsConnected())
+                            item.DisconnectHandler();
                     }
                     catch (Exception ex)
                     {
