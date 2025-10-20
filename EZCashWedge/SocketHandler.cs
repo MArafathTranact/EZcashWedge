@@ -31,8 +31,8 @@ namespace EZCashWedge
         public Socket handler = null;
         StateObject state;
         private static readonly Encoding encoding = Encoding.UTF8;
-        private readonly string ezCashAPI = ConfigurationManager.AppSettings["EZCashAPI"];// GetFileLocation("EZCashAPI");
-        private readonly string eZCashAPIToken = ConfigurationManager.AppSettings["EZCashAPIToken"];  //GetFileLocation("EZCashAPIToken");
+        private readonly string ezCashAPI = ServiceConfiguration.GetFileLocation("EZCashAPI");//ConfigurationManager.AppSettings["EZCashAPI"];// GetFileLocation("EZCashAPI");
+        private readonly string eZCashAPIToken = ServiceConfiguration.GetDecryptedToken("EZCashAPIToken");//ConfigurationManager.AppSettings["EZCashAPIToken"];  //GetFileLocation("EZCashAPIToken");
         private int _portNumber = 0;
         private string _yardId;
         public SocketHandler(Socket clientSocket, int portNumber, string yardId)
@@ -133,7 +133,7 @@ namespace EZCashWedge
             try
             {
                 //IsAPISuccess = true;
-                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 var httpClient = new HttpClient
                 {
                     Timeout = TimeSpan.FromSeconds(60)
@@ -297,17 +297,17 @@ namespace EZCashWedge
 
                 if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("partial"))
                 {
-                    Logger.LogWithNoLock($" Void is Success for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber} .");
+                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber} .");
                     status = ezcashResponse.CardStatus + $" {ezcashResponse.PartialPayPaidAmount}" + $" of {ezcashResponse.PartialPayTotal}";
                 }
                 else if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("voided"))
                 {
-                    Logger.LogWithNoLock($" Void is Success for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
+                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
                     status = "SUCCESS";
                 }
                 else if (ezcashResponse != null)
                 {
-                    Logger.LogWithNoLock($" Void is Success for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
+                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Error= {ezcashResponse.error},  Sending {ezcashResponse.CardStatus}.");
                     status = ezcashResponse.CardStatus;
                 }
                 else

@@ -45,6 +45,7 @@ namespace EZCashWedge
         public string PaymentNumber { get; set; }
         public long TranID { get; set; }
         public string amount { get; set; }
+        public string error { get; set; }
 
     }
 }
