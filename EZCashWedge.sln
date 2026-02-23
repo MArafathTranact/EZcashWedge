@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EZCashWedge", "EZCashWedge\
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EZCashWedgeInstaller", "EZCashWedgeInstaller\EZCashWedgeInstaller.vdproj", "{B3F01140-4861-4971-A14D-BAFA18410088}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EZCashWedgeConfigurator", "EZCashWedgeConfigurator\EZCashWedgeConfigurator.csproj", "{200D958A-B82E-B2D3-A819-C3B71F633A76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B3F01140-4861-4971-A14D-BAFA18410088}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3F01140-4861-4971-A14D-BAFA18410088}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3F01140-4861-4971-A14D-BAFA18410088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200D958A-B82E-B2D3-A819-C3B71F633A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200D958A-B82E-B2D3-A819-C3B71F633A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200D958A-B82E-B2D3-A819-C3B71F633A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200D958A-B82E-B2D3-A819-C3B71F633A76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

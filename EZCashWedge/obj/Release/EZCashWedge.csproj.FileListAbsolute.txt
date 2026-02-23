@@ -49,8 +49,10 @@ D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash 
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\EZCashWedge.exe.config
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\EZCashWedge.exe
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\EZCashWedge.pdb
+D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\BouncyCastle.Cryptography.dll
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\Newtonsoft.Json.dll
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\NLog.dll
+D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\BouncyCastle.Cryptography.xml
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\Newtonsoft.Json.xml
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\NLog.xml
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Release\EZCashWedge.csproj.AssemblyReference.cache
@@ -60,5 +62,3 @@ D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash 
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Release\EZCashWe.6F8452FD.Up2Date
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Release\EZCashWedge.exe
 D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\obj\Release\EZCashWedge.pdb
-D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\BouncyCastle.Cryptography.dll
-D:\Arafath_PC_9222025\Arafath - 5202024\Arafath\Arafath\Projects\Tranact\EZcash Wedge\EZcashWedge\EZCashWedge\bin\Release\BouncyCastle.Cryptography.xml

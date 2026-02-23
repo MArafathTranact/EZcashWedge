@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EZCashWedge
@@ -17,7 +11,7 @@ namespace EZCashWedge
         public Service1()
         {
             InitializeComponent();
-            //ConnectSocketListener();
+            ConnectSocketListener();
         }
 
         protected override void OnStart(string[] args)
@@ -47,7 +41,6 @@ namespace EZCashWedge
                 yardsTcpListener.StopYardListeners();
                 Logger.LogWithNoLock($" Service stopped ");
                 Task.Delay(1000);
-                NLog.LogManager.Shutdown();
 
 
             }
@@ -55,7 +48,6 @@ namespace EZCashWedge
             {
                 Logger.LogWithNoLock($" Service stopped ");
                 Task.Delay(1000);
-                NLog.LogManager.Shutdown();
             }
         }
 

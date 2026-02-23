@@ -1,16 +1,11 @@
-﻿using NLog.Fluent;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http.Headers;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
-using System.Xml.Linq;
 
 namespace EZCashWedge
 {
