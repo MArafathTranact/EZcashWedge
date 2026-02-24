@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EZcashWedgeConfigurator));
             groupBox1 = new GroupBox();
             btnConnectEZCashAPI = new Button();
@@ -48,6 +48,10 @@
             toolTipTestAPI = new ToolTip(components);
             button1 = new Button();
             toolTipOpenConfigFile = new ToolTip(components);
+            txtTraceSize = new TextBox();
+            label4 = new Label();
+            txtArchiveRollOutDays = new TextBox();
+            label5 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgYards).BeginInit();
@@ -56,6 +60,10 @@
             // groupBox1
             // 
             groupBox1.BackColor = Color.Transparent;
+            groupBox1.Controls.Add(txtArchiveRollOutDays);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(txtTraceSize);
+            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(btnConnectEZCashAPI);
             groupBox1.Controls.Add(txtWedgeIp);
             groupBox1.Controls.Add(label1);
@@ -67,7 +75,7 @@
             groupBox1.ForeColor = SystemColors.HighlightText;
             groupBox1.Location = new Point(13, 14);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(422, 146);
+            groupBox1.Size = new Size(422, 218);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "EZcash";
@@ -88,9 +96,9 @@
             // 
             txtWedgeIp.Font = new Font("Verdana", 8.25F);
             txtWedgeIp.ForeColor = SystemColors.ActiveCaptionText;
-            txtWedgeIp.Location = new Point(131, 23);
+            txtWedgeIp.Location = new Point(205, 23);
             txtWedgeIp.Name = "txtWedgeIp";
-            txtWedgeIp.Size = new Size(146, 21);
+            txtWedgeIp.Size = new Size(160, 21);
             txtWedgeIp.TabIndex = 17;
             // 
             // label1
@@ -144,7 +152,7 @@
             groupBox2.Controls.Add(dgYards);
             groupBox2.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             groupBox2.ForeColor = SystemColors.HighlightText;
-            groupBox2.Location = new Point(13, 173);
+            groupBox2.Location = new Point(13, 237);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(485, 154);
             groupBox2.TabIndex = 1;
@@ -156,8 +164,8 @@
             dgYards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgYards.Location = new Point(11, 19);
             dgYards.Name = "dgYards";
-            dataGridViewCellStyle1.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dgYards.Size = new Size(464, 124);
             dgYards.TabIndex = 0;
             // 
@@ -167,7 +175,7 @@
             btnSave.Cursor = Cursors.Hand;
             btnSave.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSave.ForeColor = SystemColors.Desktop;
-            btnSave.Location = new Point(109, 340);
+            btnSave.Location = new Point(109, 404);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 30);
             btnSave.TabIndex = 2;
@@ -182,7 +190,7 @@
             btnCancel.BackColor = Color.Red;
             btnCancel.Cursor = Cursors.Hand;
             btnCancel.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancel.Location = new Point(208, 340);
+            btnCancel.Location = new Point(208, 404);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 30);
             btnCancel.TabIndex = 3;
@@ -198,7 +206,7 @@
             button1.BackgroundImageLayout = ImageLayout.Zoom;
             button1.Cursor = Cursors.Hand;
             button1.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.Location = new Point(309, 340);
+            button1.Location = new Point(309, 404);
             button1.Name = "button1";
             button1.Size = new Size(75, 30);
             button1.TabIndex = 4;
@@ -206,12 +214,48 @@
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
+            // txtTraceSize
+            // 
+            txtTraceSize.Font = new Font("Verdana", 8.25F);
+            txtTraceSize.ForeColor = SystemColors.ActiveCaptionText;
+            txtTraceSize.Location = new Point(205, 149);
+            txtTraceSize.Name = "txtTraceSize";
+            txtTraceSize.Size = new Size(160, 21);
+            txtTraceSize.TabIndex = 26;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(15, 152);
+            label4.Name = "label4";
+            label4.Size = new Size(35, 14);
+            label4.TabIndex = 25;
+            label4.Text = "Size";
+            // 
+            // txtArchiveRollOutDays
+            // 
+            txtArchiveRollOutDays.Font = new Font("Verdana", 8.25F);
+            txtArchiveRollOutDays.ForeColor = SystemColors.ActiveCaptionText;
+            txtArchiveRollOutDays.Location = new Point(205, 182);
+            txtArchiveRollOutDays.Name = "txtArchiveRollOutDays";
+            txtArchiveRollOutDays.Size = new Size(160, 21);
+            txtArchiveRollOutDays.TabIndex = 28;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(15, 185);
+            label5.Name = "label5";
+            label5.Size = new Size(151, 14);
+            label5.TabIndex = 27;
+            label5.Text = "Archive Roll Out Days";
+            // 
             // EZcashWedgeConfigurator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightSlateGray;
-            ClientSize = new Size(505, 388);
+            ClientSize = new Size(505, 448);
             Controls.Add(button1);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
@@ -248,5 +292,9 @@
         private ToolTip toolTipTestAPI;
         private Button button1;
         private ToolTip toolTipOpenConfigFile;
+        private TextBox txtArchiveRollOutDays;
+        private Label label5;
+        private TextBox txtTraceSize;
+        private Label label4;
     }
 }

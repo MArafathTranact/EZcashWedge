@@ -159,6 +159,28 @@ namespace EZCashWedgeConfigurator
                         }));
                     }
 
+
+                    XElement DeleteArchived = appSettings.Elements("add").FirstOrDefault(e => e.Attribute("key")?.Value == "DeleteArchived");
+                    if (DeleteArchived != null)
+                    {
+                        txtArchiveRollOutDays.BeginInvoke((Action)(() =>
+                        {
+                            txtArchiveRollOutDays.Text = DeleteArchived.Attribute("value")?.Value;
+
+                        }));
+                    }
+
+
+                    XElement TraceFileSize = appSettings.Elements("add").FirstOrDefault(e => e.Attribute("key")?.Value == "TraceFileSize");
+                    if (TraceFileSize != null)
+                    {
+                        txtTraceSize.BeginInvoke((Action)(() =>
+                        {
+                            txtTraceSize.Text = TraceFileSize.Attribute("value")?.Value;
+
+                        }));
+                    }
+
                     var yardItems = doc.Descendants("yardIdSection")
                             .Elements("add")
                             .Select(x => new
@@ -224,6 +246,8 @@ namespace EZCashWedgeConfigurator
             configValue.Add("Ip", txtWedgeIp.Text.Trim());
             configValue.Add("EZCashAPI", txtEZCashAPI.Text.Trim());
             configValue.Add("EZCashAPIToken", encryptedEZCashToken);
+            configValue.Add("TraceFileSize", txtTraceSize.Text.Trim());
+            configValue.Add("DeleteArchived", txtArchiveRollOutDays.Text.Trim());
 
 
             ModifyEZCashConfig(ConfigFilePath, configValue);
@@ -330,8 +354,9 @@ namespace EZCashWedgeConfigurator
                 var result = testAPI.GetRequestNew<List<Events>>("?limit=1", txtEZCashAPI.Text.Replace("customer_barcodes", "events"), token);
                 if (result != null && result.Any())
                 {
-                    ValidateYards();
-                    MessageBox.Show("Valid EZCash API and Token");
+                    var yardResult = ValidateYards();
+                    if (yardResult)
+                        MessageBox.Show("Valid EZCash API and Token");
                 }
                 else
                 {
@@ -342,8 +367,9 @@ namespace EZCashWedgeConfigurator
                 MessageBox.Show("Provide API and Token ");
         }
 
-        private void ValidateYards()
+        private bool ValidateYards()
         {
+            var status = true;
             try
             {
                 if (yardList != null && yardList.Any())
@@ -367,12 +393,14 @@ namespace EZCashWedgeConfigurator
                         {
                             if (string.IsNullOrEmpty(result[0].yard_id))
                             {
+                                status = false;
                                 MessageBox.Show($"Invalid Yard Id{item.YardId}");
                                 break;
                             }
                         }
                         else
                         {
+                            status = false;
                             MessageBox.Show($"Invalid Yard Id{item.YardId}");
                             break;
                         }
@@ -386,8 +414,11 @@ namespace EZCashWedgeConfigurator
             }
             catch (Exception ex)
             {
+                status = false;
                 MessageBox.Show($"{ex.Message}");
             }
+
+            return status;
         }
     }
 

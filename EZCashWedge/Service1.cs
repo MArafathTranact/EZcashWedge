@@ -11,13 +11,13 @@ namespace EZCashWedge
         public Service1()
         {
             InitializeComponent();
-            ConnectSocketListener();
+            //ConnectSocketListener();
         }
 
         protected override void OnStart(string[] args)
         {
             Logger.LogWithNoLock($" Service Started ");
-            Logger.LogWithNoLock($" Version Number : 1.0.5");
+            Logger.LogWithNoLock($" Version Number : 1.0.6");
             Logger.LogWithNoLock($" -------- Maximum file size for the log is 100 MB --------");
             try
             {

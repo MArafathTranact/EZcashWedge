@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EZCashWedge", "EZCashWedge\EZCashWedge.csproj", "{8270F1D5-A6A6-45E7-9666-411B7FEDC6DB}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EZCashWedgeInstaller", "EZCashWedgeInstaller\EZCashWedgeInstaller.vdproj", "{B3F01140-4861-4971-A14D-BAFA18410088}"
+	ProjectSection(ProjectDependencies) = postProject
+		{200D958A-B82E-B2D3-A819-C3B71F633A76} = {200D958A-B82E-B2D3-A819-C3B71F633A76}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EZCashWedgeConfigurator", "EZCashWedgeConfigurator\EZCashWedgeConfigurator.csproj", "{200D958A-B82E-B2D3-A819-C3B71F633A76}"
 EndProject
