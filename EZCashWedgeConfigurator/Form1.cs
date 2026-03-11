@@ -458,7 +458,6 @@ namespace EZCashWedgeConfigurator
     {
         public int company_id { get; set; }
         public string title { get; set; }
-        public int account_type_id { get; set; }
         public string yard_id { get; set; }
 
     }
