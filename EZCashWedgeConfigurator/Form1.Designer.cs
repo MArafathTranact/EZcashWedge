@@ -29,9 +29,16 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EZcashWedgeConfigurator));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
+            label6 = new Label();
+            cbWedgeType = new ComboBox();
+            txtArchiveRollOutDays = new TextBox();
+            label5 = new Label();
+            txtTraceSize = new TextBox();
+            label4 = new Label();
             btnConnectEZCashAPI = new Button();
             txtWedgeIp = new TextBox();
             label1 = new Label();
@@ -39,8 +46,6 @@
             label3 = new Label();
             txtEZCashAPI = new TextBox();
             label2 = new Label();
-            groupBox2 = new GroupBox();
-            dgYards = new DataGridView();
             btnSave = new Button();
             btnCancel = new Button();
             toolTipSaveConfiguration = new ToolTip(components);
@@ -48,18 +53,28 @@
             toolTipTestAPI = new ToolTip(components);
             button1 = new Button();
             toolTipOpenConfigFile = new ToolTip(components);
-            txtTraceSize = new TextBox();
-            label4 = new Label();
-            txtArchiveRollOutDays = new TextBox();
-            label5 = new Label();
+            tbwedgeType = new TabControl();
+            tabPage1 = new TabPage();
+            gbyard = new GroupBox();
+            dgYards = new DataGridView();
+            tabPage2 = new TabPage();
+            gbDevice = new GroupBox();
+            dgDevices = new DataGridView();
             groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
+            tbwedgeType.SuspendLayout();
+            tabPage1.SuspendLayout();
+            gbyard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgYards).BeginInit();
+            tabPage2.SuspendLayout();
+            gbDevice.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgDevices).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
             groupBox1.BackColor = Color.Transparent;
+            groupBox1.Controls.Add(label6);
+            groupBox1.Controls.Add(cbWedgeType);
             groupBox1.Controls.Add(txtArchiveRollOutDays);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(txtTraceSize);
@@ -75,13 +90,72 @@
             groupBox1.ForeColor = SystemColors.HighlightText;
             groupBox1.Location = new Point(13, 14);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(422, 218);
+            groupBox1.Size = new Size(422, 253);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "EZcash";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(15, 154);
+            label6.Name = "label6";
+            label6.Size = new Size(89, 14);
+            label6.TabIndex = 30;
+            label6.Text = "Wedge Type";
+            // 
+            // cbWedgeType
+            // 
+            cbWedgeType.Enabled = false;
+            cbWedgeType.Font = new Font("Verdana", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cbWedgeType.FormattingEnabled = true;
+            cbWedgeType.Location = new Point(205, 151);
+            cbWedgeType.Name = "cbWedgeType";
+            cbWedgeType.Size = new Size(160, 22);
+            cbWedgeType.TabIndex = 29;
+            cbWedgeType.SelectedIndexChanged += cbWedgeType_SelectedIndexChanged;
+            // 
+            // txtArchiveRollOutDays
+            // 
+            txtArchiveRollOutDays.Enabled = false;
+            txtArchiveRollOutDays.Font = new Font("Verdana", 8.25F);
+            txtArchiveRollOutDays.ForeColor = SystemColors.ActiveCaptionText;
+            txtArchiveRollOutDays.Location = new Point(205, 220);
+            txtArchiveRollOutDays.Name = "txtArchiveRollOutDays";
+            txtArchiveRollOutDays.Size = new Size(160, 21);
+            txtArchiveRollOutDays.TabIndex = 28;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(15, 223);
+            label5.Name = "label5";
+            label5.Size = new Size(151, 14);
+            label5.TabIndex = 27;
+            label5.Text = "Archive Roll Out Days";
+            // 
+            // txtTraceSize
+            // 
+            txtTraceSize.Enabled = false;
+            txtTraceSize.Font = new Font("Verdana", 8.25F);
+            txtTraceSize.ForeColor = SystemColors.ActiveCaptionText;
+            txtTraceSize.Location = new Point(205, 187);
+            txtTraceSize.Name = "txtTraceSize";
+            txtTraceSize.Size = new Size(160, 21);
+            txtTraceSize.TabIndex = 26;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(15, 190);
+            label4.Name = "label4";
+            label4.Size = new Size(35, 14);
+            label4.TabIndex = 25;
+            label4.Text = "Size";
+            // 
             // btnConnectEZCashAPI
             // 
+            btnConnectEZCashAPI.Enabled = false;
             btnConnectEZCashAPI.Font = new Font("Verdana", 8F);
             btnConnectEZCashAPI.ForeColor = SystemColors.Desktop;
             btnConnectEZCashAPI.Location = new Point(302, 119);
@@ -94,6 +168,7 @@
             // 
             // txtWedgeIp
             // 
+            txtWedgeIp.Enabled = false;
             txtWedgeIp.Font = new Font("Verdana", 8.25F);
             txtWedgeIp.ForeColor = SystemColors.ActiveCaptionText;
             txtWedgeIp.Location = new Point(205, 23);
@@ -112,6 +187,7 @@
             // 
             // txtEZCashToken
             // 
+            txtEZCashToken.Enabled = false;
             txtEZCashToken.Font = new Font("Verdana", 8.25F);
             txtEZCashToken.ForeColor = SystemColors.ActiveCaptionText;
             txtEZCashToken.Location = new Point(131, 92);
@@ -130,6 +206,7 @@
             // 
             // txtEZCashAPI
             // 
+            txtEZCashAPI.Enabled = false;
             txtEZCashAPI.Font = new Font("Verdana", 8.25F);
             txtEZCashAPI.ForeColor = SystemColors.ActiveCaptionText;
             txtEZCashAPI.Location = new Point(131, 56);
@@ -146,36 +223,14 @@
             label2.TabIndex = 12;
             label2.Text = "API*";
             // 
-            // groupBox2
-            // 
-            groupBox2.BackColor = Color.Transparent;
-            groupBox2.Controls.Add(dgYards);
-            groupBox2.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox2.ForeColor = SystemColors.HighlightText;
-            groupBox2.Location = new Point(13, 237);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(485, 154);
-            groupBox2.TabIndex = 1;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Yard Infomation*";
-            // 
-            // dgYards
-            // 
-            dgYards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgYards.Location = new Point(11, 19);
-            dgYards.Name = "dgYards";
-            dataGridViewCellStyle2.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            dgYards.Size = new Size(464, 124);
-            dgYards.TabIndex = 0;
-            // 
             // btnSave
             // 
             btnSave.BackColor = Color.SeaGreen;
             btnSave.Cursor = Cursors.Hand;
+            btnSave.Enabled = false;
             btnSave.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSave.ForeColor = SystemColors.Desktop;
-            btnSave.Location = new Point(109, 404);
+            btnSave.Location = new Point(109, 457);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 30);
             btnSave.TabIndex = 2;
@@ -190,7 +245,7 @@
             btnCancel.BackColor = Color.Red;
             btnCancel.Cursor = Cursors.Hand;
             btnCancel.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancel.Location = new Point(208, 404);
+            btnCancel.Location = new Point(208, 457);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 30);
             btnCancel.TabIndex = 3;
@@ -206,7 +261,7 @@
             button1.BackgroundImageLayout = ImageLayout.Zoom;
             button1.Cursor = Cursors.Hand;
             button1.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.Location = new Point(309, 404);
+            button1.Location = new Point(309, 457);
             button1.Name = "button1";
             button1.Size = new Size(75, 30);
             button1.TabIndex = 4;
@@ -214,52 +269,98 @@
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
-            // txtTraceSize
+            // tbwedgeType
             // 
-            txtTraceSize.Font = new Font("Verdana", 8.25F);
-            txtTraceSize.ForeColor = SystemColors.ActiveCaptionText;
-            txtTraceSize.Location = new Point(205, 149);
-            txtTraceSize.Name = "txtTraceSize";
-            txtTraceSize.Size = new Size(160, 21);
-            txtTraceSize.TabIndex = 26;
+            tbwedgeType.Controls.Add(tabPage1);
+            tbwedgeType.Controls.Add(tabPage2);
+            tbwedgeType.ItemSize = new Size(1, 1);
+            tbwedgeType.Location = new Point(13, 270);
+            tbwedgeType.Name = "tbwedgeType";
+            tbwedgeType.SelectedIndex = 0;
+            tbwedgeType.Size = new Size(485, 176);
+            tbwedgeType.SizeMode = TabSizeMode.Fixed;
+            tbwedgeType.TabIndex = 5;
             // 
-            // label4
+            // tabPage1
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(15, 152);
-            label4.Name = "label4";
-            label4.Size = new Size(35, 14);
-            label4.TabIndex = 25;
-            label4.Text = "Size";
+            tabPage1.Controls.Add(gbyard);
+            tabPage1.Location = new Point(4, 5);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(477, 167);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Yard";
+            tabPage1.UseVisualStyleBackColor = true;
             // 
-            // txtArchiveRollOutDays
+            // gbyard
             // 
-            txtArchiveRollOutDays.Font = new Font("Verdana", 8.25F);
-            txtArchiveRollOutDays.ForeColor = SystemColors.ActiveCaptionText;
-            txtArchiveRollOutDays.Location = new Point(205, 182);
-            txtArchiveRollOutDays.Name = "txtArchiveRollOutDays";
-            txtArchiveRollOutDays.Size = new Size(160, 21);
-            txtArchiveRollOutDays.TabIndex = 28;
+            gbyard.BackColor = Color.Transparent;
+            gbyard.Controls.Add(dgYards);
+            gbyard.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            gbyard.ForeColor = SystemColors.HighlightText;
+            gbyard.Location = new Point(-4, 1);
+            gbyard.Name = "gbyard";
+            gbyard.Size = new Size(485, 154);
+            gbyard.TabIndex = 2;
+            gbyard.TabStop = false;
+            gbyard.Text = "Yard Infomation*";
+            gbyard.Visible = false;
             // 
-            // label5
+            // dgYards
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(15, 185);
-            label5.Name = "label5";
-            label5.Size = new Size(151, 14);
-            label5.TabIndex = 27;
-            label5.Text = "Archive Roll Out Days";
+            dgYards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgYards.Location = new Point(11, 13);
+            dgYards.Name = "dgYards";
+            dataGridViewCellStyle1.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgYards.Size = new Size(464, 147);
+            dgYards.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(gbDevice);
+            tabPage2.Location = new Point(4, 5);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(477, 167);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Device";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // gbDevice
+            // 
+            gbDevice.BackColor = Color.Transparent;
+            gbDevice.Controls.Add(dgDevices);
+            gbDevice.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            gbDevice.ForeColor = SystemColors.HighlightText;
+            gbDevice.Location = new Point(-4, 1);
+            gbDevice.Name = "gbDevice";
+            gbDevice.Size = new Size(485, 154);
+            gbDevice.TabIndex = 3;
+            gbDevice.TabStop = false;
+            gbDevice.Text = "Device Infomation*";
+            gbDevice.Visible = false;
+            // 
+            // dgDevices
+            // 
+            dgDevices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgDevices.Location = new Point(11, 13);
+            dgDevices.Name = "dgDevices";
+            dataGridViewCellStyle2.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgDevices.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dgDevices.Size = new Size(464, 147);
+            dgDevices.TabIndex = 0;
             // 
             // EZcashWedgeConfigurator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightSlateGray;
-            ClientSize = new Size(505, 448);
+            ClientSize = new Size(505, 499);
+            Controls.Add(tbwedgeType);
             Controls.Add(button1);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
-            Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "EZcashWedgeConfigurator";
@@ -268,15 +369,19 @@
             Load += EZcashWedgeConfigurator_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
+            tbwedgeType.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            gbyard.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgYards).EndInit();
+            tabPage2.ResumeLayout(false);
+            gbDevice.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgDevices).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private GroupBox groupBox1;
-        private GroupBox groupBox2;
         private TextBox txtWedgeIp;
         private Label label1;
         private TextBox txtEZCashToken;
@@ -286,7 +391,6 @@
         private Button btnSave;
         private Button btnCancel;
         private Button btnConnectEZCashAPI;
-        private DataGridView dgYards;
         private ToolTip toolTipSaveConfiguration;
         private ToolTip toolTipCancel;
         private ToolTip toolTipTestAPI;
@@ -296,5 +400,14 @@
         private Label label5;
         private TextBox txtTraceSize;
         private Label label4;
+        private ComboBox cbWedgeType;
+        private Label label6;
+        private TabControl tbwedgeType;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private GroupBox gbDevice;
+        private DataGridView dgDevices;
+        private GroupBox gbyard;
+        private DataGridView dgYards;
     }
 }

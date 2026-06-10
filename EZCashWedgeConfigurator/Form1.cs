@@ -2,15 +2,18 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EZCashWedgeConfigurator
 {
     public partial class EZcashWedgeConfigurator : Form
     {
         private BindingList<Yards> yardList = [];
+        private BindingList<Devices> deviceList = [];
         TestAPI testAPI = new();
         public string ConfigFilePath = string.Empty;
         public string EZcashToken = string.Empty;
+        public List<WedgeType> wedgeTypes = new List<WedgeType>();
 
         public EZcashWedgeConfigurator()
         {
@@ -24,19 +27,32 @@ namespace EZCashWedgeConfigurator
 
         private void EZcashWedgeConfigurator_Load(object sender, EventArgs e)
         {
-
+            wedgeTypes.Clear();
+            wedgeTypes.Add(new WedgeType() { wedge_id = 1, wedge_type = "Barcode Generator" });
+            wedgeTypes.Add(new WedgeType() { wedge_id = 2, wedge_type = "Barcode Decipher" });
+            wedgeTypes.Add(new WedgeType() { wedge_id = 2, wedge_type = "Direct Pay" });
+            cbWedgeType.DataSource = wedgeTypes;
+            cbWedgeType.DisplayMember = "wedge_type";
+            cbWedgeType.ValueMember = "wedge_id";
+            // Handle cell click events for buttons
+            dgYards.CellClick += DataGridView1_CellClick;
+            dgDevices.CellClick += DeviceDataGridView1_CellClick;
 
         }
 
-        private void LoadDataGrid()
+        private void LoadYardDataGrid()
         {
             // Setup DataGridView
+            dgYards.DataSource = null;
+            dgYards.Columns.Clear();
             dgYards.AllowUserToAddRows = false;
             dgYards.RowHeadersVisible = false;
             dgYards.AllowUserToResizeColumns = false;
             dgYards.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgYards.DefaultCellStyle.ForeColor = Color.Black;
             dgYards.DataSource = yardList;
+
+            dgYards.BindingContext = new BindingContext();
 
             DataGridViewButtonColumn addButtonColumn = new DataGridViewButtonColumn
             {
@@ -62,10 +78,91 @@ namespace EZCashWedgeConfigurator
             removeButtonColumn.CellTemplate.ToolTipText = "Remove yard information";
             dgYards.Columns.Add(removeButtonColumn);
 
-            dgYards.Columns["YardId"].Width = 250;
+            // Safe access to the data-bound column
+            if (dgYards.Columns.Contains("YardId"))
+            {
+                dgYards.Columns["YardId"].Width = 250;
 
-            // Handle cell click events for buttons
-            dgYards.CellClick += DataGridView1_CellClick;
+            }
+
+
+
+        }
+
+        private void LoadDeviceDataGrid()
+        {
+            // Setup DataGridView
+            dgDevices.DataSource = null; // Reset binding
+            dgDevices.Columns.Clear();
+            dgDevices.AllowUserToAddRows = false;
+            dgDevices.RowHeadersVisible = false;
+            dgDevices.AllowUserToResizeColumns = false;
+            dgDevices.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgDevices.DefaultCellStyle.ForeColor = Color.Black;
+            dgDevices.DataSource = deviceList;
+
+            dgDevices.BindingContext = new BindingContext();
+
+            DataGridViewButtonColumn addButtonColumn = new DataGridViewButtonColumn
+            {
+                //addButtonColumn.Width = 10;
+
+                Text = "➕",
+                UseColumnTextForButtonValue = true,
+                Width = 35,
+            };
+            addButtonColumn.CellTemplate.ToolTipText = "Add device information";
+            dgDevices.Columns.Add(addButtonColumn);
+
+            // Add "Remove" button column
+            DataGridViewButtonColumn removeButtonColumn = new DataGridViewButtonColumn
+            {
+
+                Text = "❌",
+                UseColumnTextForButtonValue = true,
+                Width = 35,
+                ToolTipText = "Remove device information"
+            };
+
+            removeButtonColumn.CellTemplate.ToolTipText = "Remove device information";
+            dgDevices.Columns.Add(removeButtonColumn);
+
+            // Safe access to the data-bound column
+            if (dgDevices.Columns.Contains("DeviceId"))
+            {
+                dgDevices.Columns["DeviceId"].Width = 250;
+            }
+        }
+
+        private void DeviceDataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Ignore header clicks
+            if (e.RowIndex < 0) return;
+
+            // Add button clicked
+            if (e.ColumnIndex == 2)
+            {
+                int currentRowIndex = e.RowIndex;
+
+                deviceList.Add(new Devices());
+                //dgYards.Rows.Insert(currentRowIndex + 1, "", "");
+            }
+
+            // Remove button clicked
+            else if (e.ColumnIndex == 3)
+            {
+                if (dgDevices.Rows.Count > 1)
+                {
+                    //dgYards.Rows.RemoveAt(e.RowIndex);
+                    var item = dgDevices.CurrentRow.DataBoundItem as Devices;
+                    deviceList.Remove(item);
+                }
+                else
+                {
+                    MessageBox.Show("At least one row must remain.", "Warning",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -122,6 +219,8 @@ namespace EZCashWedgeConfigurator
             {
                 if (File.Exists(ConfigFilePath))
                 {
+                    deviceList.Clear();
+                    yardList.Clear();
                     XDocument doc = XDocument.Load(ConfigFilePath);
                     XElement appSettings = doc.Root.Element("appSettings");
                     if (appSettings == null)
@@ -181,6 +280,17 @@ namespace EZCashWedgeConfigurator
                         }));
                     }
 
+                    XElement WedgeType = appSettings.Elements("add").FirstOrDefault(e => e.Attribute("key")?.Value == "WedgeType");
+                    if (WedgeType != null)
+                    {
+                        cbWedgeType.BeginInvoke((Action)(() =>
+                        {
+                            cbWedgeType.SelectedIndex = Convert.ToInt16(WedgeType.Attribute("value")?.Value);
+
+                        }));
+                    }
+
+
                     var yardItems = doc.Descendants("yardIdSection")
                             .Elements("add")
                             .Select(x => new
@@ -194,12 +304,51 @@ namespace EZCashWedgeConfigurator
                     {
                         yardList.Add(new Yards { Port = item.Key, YardId = item.Value });
                     }
-                    LoadDataGrid();
+
+
+                    var deviceItems = doc.Descendants("deviceSection")
+                            .Elements("add")
+                            .Select(x => new
+                            {
+                                Key = (string)x.Attribute("key"),
+                                Value = (string)x.Attribute("value")
+                            })
+                            .ToList();
+
+                    foreach (var item in deviceItems)
+                    {
+                        deviceList.Add(new Devices { Port = item.Key, DeviceId = item.Value });
+                    }
+
+                    LoadYardDataGrid();
+                    LoadDeviceDataGrid();
+                    EnableControls();
+
+
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error in reading config");
+            }
+        }
+
+        private void EnableControls()
+        {
+            try
+            {
+                cbWedgeType.Enabled = true;
+                btnConnectEZCashAPI.Enabled = true;
+                btnSave.Enabled = true;
+                txtArchiveRollOutDays.Enabled = true;
+                txtEZCashAPI.Enabled = true;
+                txtEZCashToken.Enabled = true;
+                txtTraceSize.Enabled = true;
+                txtWedgeIp.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error in enabling controls");
             }
         }
 
@@ -210,11 +359,139 @@ namespace EZCashWedgeConfigurator
                 MessageBox.Show($"Provide required EZCash Information", "Warning");
                 return;
             }
-            else if (yardList != null && yardList.Count == 0)
+
+            var wedgeType = cbWedgeType.SelectedIndex;
+            var validSave = true;
+            switch (wedgeType)
+            {
+                case 0:
+                    validSave = CheckNullYard();
+                    break;
+                case 1:
+                case 2:
+                    validSave = CheckNullDevice();
+                    break;
+                default:
+                    break;
+            }
+
+            if (!validSave)
+                return;
+
+            //if (cbWedgeType.SelectedIndex == 0)
+            //{
+            //    if (yardList != null && yardList.Count == 0)
+            //    {
+
+            //        MessageBox.Show($"Provide Yard Information", "Warning");
+            //        return;
+
+            //    }
+            //    else if (yardList != null && yardList.Count > 0)
+            //    {
+            //        var valid = false;
+            //        foreach (var item in yardList)
+            //        {
+            //            if (!string.IsNullOrEmpty(item.YardId) && !string.IsNullOrEmpty(item.Port))
+            //            {
+            //                valid = true;
+            //            }
+
+            //        }
+            //        if (!valid)
+            //        {
+            //            MessageBox.Show($"Provide valid yard information");
+            //            return;
+            //        }
+            //    }
+
+            //}
+            //else
+            //{
+            //    if (deviceList != null && deviceList.Count == 0)
+            //    {
+
+            //        MessageBox.Show($"Provide Device Information", "Warning");
+            //        return;
+
+            //    }
+            //    else if (deviceList != null && deviceList.Count > 0)
+            //    {
+            //        var valid = false;
+            //        foreach (var item in deviceList)
+            //        {
+            //            if (!string.IsNullOrEmpty(item.DeviceId) && !string.IsNullOrEmpty(item.Port))
+            //            {
+            //                valid = true;
+            //            }
+
+            //        }
+            //        if (!valid)
+            //        {
+            //            MessageBox.Show($"Provide valid device information");
+            //            return;
+            //        }
+            //    }
+            //}
+
+
+            string? encryptedEZCashToken;
+
+            if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
+                encryptedEZCashToken = txtEZCashToken.Text;
+            else
+                encryptedEZCashToken = TokenEncryptDecrypt.Encrypt(txtEZCashToken.Text);
+
+            Dictionary<string, string> configValue = [];
+            configValue.Add("Ip", txtWedgeIp.Text.Trim());
+            configValue.Add("EZCashAPI", txtEZCashAPI.Text.Trim());
+            configValue.Add("EZCashAPIToken", encryptedEZCashToken);
+            configValue.Add("TraceFileSize", txtTraceSize.Text.Trim());
+            configValue.Add("DeleteArchived", txtArchiveRollOutDays.Text.Trim());
+            configValue.Add("WedgeType", cbWedgeType.SelectedIndex.ToString());
+
+            ModifyEZCashConfig(ConfigFilePath, configValue);
+        }
+
+        private bool CheckNullDevice()
+        {
+            var result = true;
+            if (deviceList != null && deviceList.Count == 0)
+            {
+
+                MessageBox.Show($"Provide Device Information", "Warning");
+                result = false;
+
+            }
+            else if (deviceList != null && deviceList.Count > 0)
+            {
+                var valid = false;
+                foreach (var item in deviceList)
+                {
+                    if (!string.IsNullOrEmpty(item.DeviceId) && !string.IsNullOrEmpty(item.Port))
+                    {
+                        valid = true;
+                    }
+
+                }
+                if (!valid)
+                {
+                    MessageBox.Show($"Provide valid device information");
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
+        private bool CheckNullYard()
+        {
+            var result = true;
+            if (yardList != null && yardList.Count == 0)
             {
 
                 MessageBox.Show($"Provide Yard Information", "Warning");
-                return;
+                result = false;
 
             }
             else if (yardList != null && yardList.Count > 0)
@@ -230,27 +507,12 @@ namespace EZCashWedgeConfigurator
                 }
                 if (!valid)
                 {
-                    MessageBox.Show($"Provide Wedge Ip Address");
-                    return;
+                    MessageBox.Show($"Provide valid yard information");
+                    result = false;
                 }
             }
 
-            var encryptedEZCashToken = string.Empty;
-
-            if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
-                encryptedEZCashToken = txtEZCashToken.Text;
-            else
-                encryptedEZCashToken = TokenEncryptDecrypt.Encrypt(txtEZCashToken.Text);
-
-            Dictionary<string, string> configValue = [];
-            configValue.Add("Ip", txtWedgeIp.Text.Trim());
-            configValue.Add("EZCashAPI", txtEZCashAPI.Text.Trim());
-            configValue.Add("EZCashAPIToken", encryptedEZCashToken);
-            configValue.Add("TraceFileSize", txtTraceSize.Text.Trim());
-            configValue.Add("DeleteArchived", txtArchiveRollOutDays.Text.Trim());
-
-
-            ModifyEZCashConfig(ConfigFilePath, configValue);
+            return result;
         }
 
         private void ModifyEZCashConfig(string configPath, Dictionary<string, string> configValue)
@@ -314,6 +576,31 @@ namespace EZCashWedgeConfigurator
                                 ));
                         }
                     }
+
+                    if (deviceList != null && deviceList.Count > 0)
+                    {
+                        XElement deviceSection = doc.Root.Element("deviceSection");
+
+                        if (deviceSection == null)
+                        {
+                            deviceSection = new XElement("deviceSection");
+                            doc.Root.Add(deviceSection);
+                        }
+
+
+                        deviceSection.Elements("add").Remove();
+
+                        foreach (var device in deviceList)
+                        {
+                            if (!string.IsNullOrEmpty(device.Port) && !string.IsNullOrEmpty(device.DeviceId))
+                                deviceSection.Add(new XElement("add",
+                                    new XAttribute("key", device.Port.Trim() ?? string.Empty),
+                                    new XAttribute("value", device.DeviceId.Trim() ?? string.Empty)
+                                ));
+                        }
+                    }
+
+
                     doc.Save(tempPath);
                     File.Replace(tempPath, configPath, backupPath);
 
@@ -340,31 +627,48 @@ namespace EZCashWedgeConfigurator
 
         private void btnConnectEZCashAPI_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtEZCashAPI.Text) && !string.IsNullOrEmpty(txtEZCashToken.Text))
+            try
             {
-
-                var token = string.Empty;
-
-                if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
-                    token = TokenEncryptDecrypt.Decrypt(txtEZCashToken.Text);
-                else
-                    token = txtEZCashToken.Text;
-
-
-                var result = testAPI.GetRequestNew<List<Events>>("?limit=1", txtEZCashAPI.Text.Replace("customer_barcodes", "events"), token);
-                if (result != null && result.Any())
+                if (!string.IsNullOrEmpty(txtEZCashAPI.Text) && !string.IsNullOrEmpty(txtEZCashToken.Text))
                 {
-                    var yardResult = ValidateYards();
-                    if (yardResult)
-                        MessageBox.Show("Valid EZCash API and Token");
+
+                    var token = string.Empty;
+
+                    if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
+                        token = TokenEncryptDecrypt.Decrypt(txtEZCashToken.Text);
+                    else
+                        token = txtEZCashToken.Text;
+
+
+                    var result = testAPI.GetRequestNew<List<Events>>("?limit=1", txtEZCashAPI.Text.Replace("customer_barcodes", "events"), token);
+                    if (result != null && result.Any())
+                    {
+                        if (cbWedgeType.SelectedIndex == 0)
+                        {
+                            var yardResult = ValidateYards();
+                            if (yardResult)
+                                MessageBox.Show("Valid EZCash API, Token and Yards");
+                        }
+                        else
+                        {
+                            var deviceResult = ValidateDevices();
+                            if (deviceResult)
+                                MessageBox.Show("Valid EZCash API, Token and Devices");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("InValid EZCash API and Token");
+                    }
                 }
                 else
-                {
-                    MessageBox.Show("InValid EZCash API and Token");
-                }
+                    MessageBox.Show("Provide API and Token ");
             }
-            else
-                MessageBox.Show("Provide API and Token ");
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+
         }
 
         private bool ValidateYards()
@@ -401,7 +705,7 @@ namespace EZCashWedgeConfigurator
                         else
                         {
                             status = false;
-                            MessageBox.Show($"Invalid Yard Id{item.YardId}");
+                            MessageBox.Show($"Invalid Yard Id : {item.YardId}");
                             break;
                         }
 
@@ -420,12 +724,91 @@ namespace EZCashWedgeConfigurator
 
             return status;
         }
+
+        private bool ValidateDevices()
+        {
+            var status = true;
+            try
+            {
+
+                if (deviceList != null && deviceList.Any())
+                {
+                    var token = string.Empty;
+
+                    if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
+                        token = TokenEncryptDecrypt.Decrypt(txtEZCashToken.Text);
+                    else
+                        token = txtEZCashToken.Text;
+
+                    var api = txtEZCashAPI.Text.Replace("customer_barcodes", "devices");
+
+                    foreach (var item in deviceList)
+                    {
+                        var deviceid = item.DeviceId.Trim();
+                        var result = testAPI.GetRequestNew<Device>($"/{deviceid}", api, token);
+
+                        if (result != null)
+                        {
+                            if (result.dev_id == 0)
+                            {
+                                status = false;
+                                MessageBox.Show($"Invalid Device Id : {item.DeviceId}");
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            status = false;
+                            MessageBox.Show($"Invalid Device Id{item.DeviceId}");
+                            break;
+                        }
+
+                    }
+                }
+                else
+                    MessageBox.Show("Provide device information");
+            }
+            catch (Exception ex)
+            {
+                status = false;
+                MessageBox.Show($"{ex.Message}");
+            }
+
+            return status;
+        }
+
+        private void cbWedgeType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cbWedgeType.SelectedIndex)
+            {
+                case 0:
+                    gbyard.Visible = true;
+                    gbDevice.Visible = false;
+                    tbwedgeType.SelectedIndex = 0;
+
+                    break;
+                case 1:
+                case 2:
+                    gbyard.Visible = false;
+                    gbDevice.Visible = true;
+                    tbwedgeType.SelectedIndex = 1;
+                    break;
+            }
+        }
+
     }
 
     public class Yards
     {
         public string Port { get; set; }
         public string YardId { get; set; }
+    }
+
+    public class Devices
+    {
+        public string Port { get; set; }
+        public string DeviceId { get; set; }
+
     }
 
     public class CustomerBarcode
@@ -460,5 +843,17 @@ namespace EZCashWedgeConfigurator
         public string title { get; set; }
         public string yard_id { get; set; }
 
+    }
+
+    public class Device()
+    {
+        public int dev_id { get; set; }
+
+    }
+
+    public class WedgeType()
+    {
+        public string wedge_type { get; set; }
+        public int wedge_id { get; set; }
     }
 }

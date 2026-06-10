@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Configuration;
+using System.Dynamic;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Net.Http;
-using Newtonsoft.Json;
 
 namespace EZCashWedge
 {
@@ -21,21 +24,71 @@ namespace EZCashWedge
         }
     }
 
+    public class Device
+    {
+        public string encryption_key { get; set; }
+        public int dev_id { get; set; }
+        public string yardid { get; set; }
+    }
+
     public class SocketHandler
     {
         public Socket handler = null;
         StateObject state;
+        TestAPI testAPI = new TestAPI();
         private static readonly Encoding encoding = Encoding.UTF8;
-        private readonly string ezCashAPI = ServiceConfiguration.GetFileLocation("EZCashAPI");//ConfigurationManager.AppSettings["EZCashAPI"];// GetFileLocation("EZCashAPI");
-        private readonly string eZCashAPIToken = ServiceConfiguration.GetDecryptedToken("EZCashAPIToken");//ConfigurationManager.AppSettings["EZCashAPIToken"];  //GetFileLocation("EZCashAPIToken");
+        private readonly string ezCashAPI = ServiceConfiguration.GetFileLocation("EZCashAPI");
+        private readonly string eZCashAPIToken = ServiceConfiguration.GetDecryptedToken("EZCashAPIToken");
+        private readonly string wedgeType = ServiceConfiguration.GetFileLocation("WedgeType");
         private int _portNumber = 0;
         private string _yardId;
+        private string _type = string.Empty;
+        private string _encryptionKey = string.Empty;
+        private string _encodeyardId = string.Empty;
         public SocketHandler(Socket clientSocket, int portNumber, string yardId)
         {
             handler = clientSocket;
             state = new StateObject { workSocket = clientSocket };
             _portNumber = portNumber;
             _yardId = yardId;
+
+            _type = wedgeType == "0" ? $" Yard : {_yardId} " : $" Device : {_yardId}";
+
+            if (wedgeType == "1" || wedgeType == "2")
+                GetDeviceInformation();
+        }
+
+        private void GetDeviceInformation()
+        {
+            try
+            {
+                var api = ezCashAPI.Replace("customer_barcodes", "devices");
+                var result = testAPI.GetRequestNew<Device>($"/{_yardId}", api, eZCashAPIToken);
+
+                LogEvents($" Fetching device information.");
+                if (result != null)
+                {
+
+                    _encodeyardId = result.yardid;
+                    LogEvents($" Device YardId '{_encodeyardId}'.");
+                    if (!string.IsNullOrEmpty(result.encryption_key))
+                    {
+                        _encryptionKey = result.encryption_key;
+
+                        LogEvents($" Encryption key '{_encryptionKey}'.");
+                    }
+                    else
+                    {
+                        Logger.LogWarningWithNoLock($" No device encryption key found.");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogExceptionWithNoLock(" {_type} Exception at GetDeviceInformation at Port {_portNumber} . : ", ex);
+            }
+
         }
 
         public string GetFileLocation(string name)
@@ -100,26 +153,222 @@ namespace EZCashWedge
         {
             var response = string.Empty;
 
-            switch (command)
+            if (wedgeType == "0" || wedgeType == "2")
             {
-                case "encode":
-                    LogEvents($" Entering encode at Port {_portNumber} ..");
-                    response = await ProcessEncodeCommand(command, request);
-                    SendNonWebResponse(handler, response, true);
-                    break;
-                case "void":
-                    LogEvents($" Entering void at Port {_portNumber} ..");
-                    response = await ProcessVoidCommand(command, request);
-                    SendNonWebResponse(handler, response, true);
-                    break;
-                case "inquire":
-                    LogEvents($" Entering inquire at Port {_portNumber} ..");
-                    response = await ProcessInquireCommand(command, request);
-                    SendNonWebResponse(handler, response, false);
-                    break;
+                switch (command)
+                {
+                    case "encode":
+                        LogEvents($" Entering encode at Port {_portNumber} ..");
+                        response = await ProcessEncodeCommand(command, request);
+                        SendNonWebResponse(handler, response, true);
+                        break;
+                    case "void":
+                        LogEvents($" Entering void at Port {_portNumber} ..");
+                        response = await ProcessVoidCommand(command, request);
+                        SendNonWebResponse(handler, response, true);
+                        break;
+                    case "inquire":
+                        LogEvents($" Entering inquire at Port {_portNumber} ..");
+                        response = await ProcessInquireCommand(command, request);
+                        SendNonWebResponse(handler, response, false);
+                        break;
+                }
+            }
+            else
+            {
+                LogEvents($" Entering barcode decoding at Port {_portNumber} ..");
+                response = await ProcessBarcodeDecodingCommand(command, request);
+                SendNonWebResponse(handler, response, true);
+            }
+        }
+
+        private async Task<string> ProcessBarcodeDecodingCommand(string rawInput, string request)
+        {
+            try
+            {
+                int start = rawInput.IndexOf('=');
+                int end = rawInput.IndexOf('?');
+
+                if (start == -1 || end == -1 || end <= start)
+                {
+                    Logger.LogWarningWithNoLock(" Invalid message format: Missing delimiters.");
+                    return "FAIL";
+                }
+
+                string dataSegment = rawInput.Substring(start + 1, end - start - 1);
+
+                // 2. Extract the last 16 digits (Encrypted16)
+                if (dataSegment.Length < 16)
+                {
+                    Logger.LogWarningWithNoLock($" Data segment too short to contain Encrypted16 block. {dataSegment}");
+                    return "FAIL";
+                }
+
+                // Step 1: Get the 16 digits before the '='
+                string pan = rawInput.Split('=')[0].TrimStart(';');
+
+                // Step 2: The 'Passed' value is the last 4 digits of that PAN
+                string passedChecksum = pan.Substring(pan.Length - 4);
+
+                // Step 3: The 'Calculated' value is the same extraction
+                // If the string was cut off, pan.Length would be wrong and this would fail.
+                string calculatedChecksum = pan.Substring(12, 4);
+
+                if (passedChecksum != calculatedChecksum)
+                {
+                    Logger.LogWarningWithNoLock($" Passed checksum({passedChecksum}) doesn't match with calcualted checksum ({calculatedChecksum}).");
+                    return "FAIL";
+                }
+
+                LogEvents($" Passed Checksum = {passedChecksum}");
+                LogEvents($" Calculated Checksum = {calculatedChecksum}");
+
+                string encrypted16 = dataSegment.Substring(dataSegment.Length - 16);
+
+                LogEvents($" Encrypted 16 Digit : {encrypted16}");
+
+                LogEvents($" Decrypt with key : {_encryptionKey}");
+
+                // 3. Perform the Digit-by-Digit Subtraction
+                string decrypted16 = DecryptNumericString(encrypted16, _encryptionKey);
+
+                LogEvents($" Decrypted 16 Digit : {decrypted16}");
+
+
+                string amountRaw = decrypted16.Substring(0, 6);
+                decimal properAmount = ParseToDecimal(amountRaw);
+
+                LogEvents($" Amount : {properAmount}");
+
+                string receiptNumber = GetReceiptNumber(rawInput);
+                LogEvents($" Receipt  : {receiptNumber}");
+                string dateRaw = decrypted16.Substring(10, 6);
+                LogEvents($" Date  : {dateRaw}");
+                var ezcashRequest = new EzCashAPIRequest
+                {
+                    payment_nbr = receiptNumber,
+                    amount = properAmount,
+                    yard_id = _encodeyardId
+
+                };
+
+                if (string.IsNullOrWhiteSpace(ezcashRequest.payment_nbr) || ezcashRequest.payment_nbr.Contains("Error"))
+                {
+                    LogEvents($" No/Invalid Payment Number in command at Port {_portNumber} .");
+                    return "FAIL";
+                }
+
+                var httpClient = new HttpClient
+                {
+                    Timeout = TimeSpan.FromSeconds(60)
+                };
+
+                if (!string.IsNullOrWhiteSpace(eZCashAPIToken))
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", eZCashAPIToken);
+
+                var endpoint = ezCashAPI + "encode";
+
+                var json = JsonConvert.SerializeObject(ezcashRequest);
+                var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(endpoint, stringContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+                    var ezCashresponse = new EzCashResponse();
+                    ezCashresponse = JsonConvert.DeserializeObject<EzCashResponse>(content);
+
+                    if (ezCashresponse != null)
+                    {
+                        var barcode = ezCashresponse.Barcode.Substring(0, 5) + "...";
+                        LogEvents($" Encode is Success at Port {_portNumber} ..");
+                        LogEvents($" TranId:{ezCashresponse.TranID}  AmtAuth:{ezCashresponse.amount}  Barcode:{barcode} at Port {_portNumber} .");
+                        if (ezCashresponse.CardStatus.ToLower() == "duplicate")
+                        {
+                            LogEvents($" Card already exists.");
+                            LogEvents($" Sending DUPLICATE {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                            return $"DUPLICATE {ezCashresponse.Barcode}";
+                        }
+                        else
+                        {
+                            LogEvents($" Sending SUCCESS {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                            return $"SUCCESS {ezCashresponse.Barcode}";
+                        }
+                    }
+                    else
+                    {
+                        LogEvents($" Encode failed for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                        return "FAIL";
+                    }
+                }
+                else
+                {
+                    var responseBody = response.Content.ReadAsStringAsync().Result;
+                    Logger.LogWarningWithNoLock($" Encode failed for Receipt number {ezcashRequest.payment_nbr} : Failure Code {responseBody} at Port {_portNumber} .Sending FAIL status.");
+                    return "FAIL";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogExceptionWithNoLock(" {_type} Exception at ProcessBarcodeDecodingCommand at Port {_portNumber} . : ", ex);
+                return "FAIL";
             }
 
+
         }
+
+        public string GetReceiptNumber(string rawInput)
+        {
+            if (string.IsNullOrWhiteSpace(rawInput))
+                return "Error: Input is empty";
+
+            var match = Regex.Match(rawInput, @"^;(\d{6})(\d{6})(\d{4})=");
+
+            if (match.Success)
+            {
+                // Group 0 is the full match, Group 1 is first 6, Group 2 is receipt number.
+                string ConistenChecksum = match.Groups[1].Value;
+                string receiptNumber = match.Groups[2].Value;
+                string checksum = match.Groups[3].Value;
+
+                return receiptNumber;
+            }
+            else
+            {
+                return "Error: Message does not follow the 6-6-4 digit validation rules.";
+            }
+        }
+
+        private decimal ParseToDecimal(string raw)
+        {
+            if (!long.TryParse(raw, out long kopeks))
+                return 0.00m;
+
+            // Dividing by 100 converts the "cents" into the proper decimal place
+            return kopeks / 100m;
+        }
+
+        private string DecryptNumericString(string ciphertext, string key)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < ciphertext.Length; i++)
+            {
+                // Convert char digit to int (e.g., '2' becomes 2)
+                int cDigit = ciphertext[i] - '0';
+                int kDigit = key[i] - '0';
+
+                // Modular subtraction: (C - K + 10) % 10
+                int rDigit = (cDigit - kDigit + 10) % 10;
+
+                sb.Append(rDigit);
+            }
+
+            return sb.ToString();
+        }
+
 
         public async Task<T> Get<T>(string path, string token, string endpoint, string command, string paymentNumber)
         {
@@ -150,7 +399,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at Get() at Port {_portNumber} .: ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at Get() at Port {_portNumber} .: ", ex);
                 return default;
             }
             return JsonConvert.DeserializeObject<T>(httpResponseString);
@@ -162,6 +411,9 @@ namespace EZCashWedge
             {
                 var splittedRequest = request.Replace(command, "").Split('>');
                 var ezcashRequest = new EzCashAPIRequest();
+
+                dynamic input = new ExpandoObject();
+
                 foreach (var item in splittedRequest)
                 {
                     var split = item.Split(new string[] { "=<" }, StringSplitOptions.None);
@@ -170,28 +422,46 @@ namespace EZCashWedge
                     {
                         case var s when filter.Contains("payment_nbr"):
                             ezcashRequest.payment_nbr = split[1];
+                            input.payment_nbr = split[1];
                             break;
                         case var s when filter.Contains("amount"):
                             ezcashRequest.amount = decimal.Parse(split[1]);
+                            input.amount = split[1];
                             break;
                         //case var s when filter.Contains("date"): // To avoid timestamp issue in UI, removed passing date on encode call
                         //    ezcashRequest.date = split[1];
                         //    break;
                         case var s when filter.Contains("cashier_id"):
                             ezcashRequest.cashier_id = split[1];
+                            input.cashier_id = split[1];
                             break;
                         case var s when filter.Contains("device_id"):
                             ezcashRequest.device_id = split[1];
+                            input.device_id = split[1];
                             break;
                         case var s when filter.Contains("payee"):
                             ezcashRequest.payee = split[1];
+                            input.payee = split[1];
                             break;
                     }
                 }
-                ezcashRequest.yard_id = _yardId;
+
+                if (wedgeType == "2")
+                {
+                    ezcashRequest.yard_id = _encodeyardId;
+                    ezcashRequest.device_id = _yardId; // In wedgetype case=2 , yardid is device id
+
+                    input.device_id = _yardId;
+                    input.yard_id = _encodeyardId;
+                }
+                else
+                {
+                    ezcashRequest.yard_id = _yardId;
+                    input.yard_id = _yardId;
+                }
 
                 if (string.IsNullOrWhiteSpace(ezcashRequest.payment_nbr))
-                    Logger.LogWithNoLock($" No Payment Number in command at Port {_portNumber} .");
+                    LogEvents($" No Payment Number in command at Port {_portNumber} .");
 
 
                 var httpClient = new HttpClient
@@ -204,8 +474,9 @@ namespace EZCashWedge
 
                 var endpoint = ezCashAPI + "encode";
 
-                var json = JsonConvert.SerializeObject(ezcashRequest);
+                var json = JsonConvert.SerializeObject(input);
                 var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+                LogEvents($" Creating barcode using endpoint :{endpoint}, payload ={json} at port {_portNumber}.");
 
                 var response = await httpClient.PostAsync(endpoint, stringContent);
                 if (response.IsSuccessStatusCode)
@@ -218,36 +489,36 @@ namespace EZCashWedge
                     if (ezCashresponse != null)
                     {
                         var barcode = ezCashresponse.Barcode.Substring(0, 5) + "...";
-                        Logger.LogWithNoLock($" Encode is Success at Port {_portNumber} ..");
-                        Logger.LogWithNoLock($" TranId:{ezCashresponse.TranID}  AmtAuth:{ezCashresponse.amount}  Barcode:{barcode} at Port {_portNumber} .");
+                        LogEvents($" Encode is Success at Port {_portNumber} ..");
+                        LogEvents($" TranId:{ezCashresponse.TranID}  AmtAuth:{ezCashresponse.amount}  Barcode:{barcode} at Port {_portNumber} .");
                         if (ezCashresponse.CardStatus.ToLower() == "duplicate")
                         {
-                            Logger.LogWithNoLock($" Card already exists. \r\n{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffff}|INFO| Sending DUPLICATE {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                            LogEvents($" Card already exists. \r\n{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffff}|INFO| Sending DUPLICATE {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
                             return $"DUPLICATE {ezCashresponse.Barcode}";
                         }
                         else
                         {
-                            Logger.LogWithNoLock($" Sending SUCCESS {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                            LogEvents($" Sending SUCCESS {barcode} for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
                             return $"SUCCESS {ezCashresponse.Barcode}";
                         }
                     }
                     else
                     {
-                        Logger.LogWithNoLock($" Encode failed for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
+                        LogEvents($" Encode failed for Payment Number '{ezcashRequest.payment_nbr}' from Port {_portNumber}");
                         return "FAIL";
                     }
                 }
                 else
                 {
                     var responseBody = response.Content.ReadAsStringAsync().Result;
-                    Logger.LogWarningWithNoLock($" Encode failed for Receipt number {ezcashRequest.payment_nbr} : Failure Code {responseBody} at Port {_portNumber} .Sending FAIL status.");
+                    Logger.LogWarningWithNoLock($" {_type} Encode failed for Receipt number {ezcashRequest.payment_nbr} : Failure Code {responseBody} at Port {_portNumber} .Sending FAIL status.");
                     return "FAIL";
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock("Exception at ProcessEncodeCommand at Port {_portNumber} . : ", ex);
+                Logger.LogExceptionWithNoLock(" {_type} Exception at ProcessEncodeCommand at Port {_portNumber} . : ", ex);
                 return "FAIL";
             }
 
@@ -284,7 +555,7 @@ namespace EZCashWedge
                 ezcashRequest.yard_id = _yardId;
 
                 if (string.IsNullOrWhiteSpace(ezcashRequest.payment_nbr))
-                    Logger.LogWithNoLock($" No Payment Number in command at Port {_portNumber} .");
+                    LogEvents($" No Payment Number in command at Port {_portNumber} .");
 
                 var voidParams = $"void?payment_nbr={ezcashRequest.payment_nbr}&date={string.Format("{0:yyyy-MM-ddTHH:mm}", ezcashRequest.date)}&amount={ezcashRequest.amount}&yard_id={ezcashRequest.yard_id}";
 
@@ -292,29 +563,29 @@ namespace EZCashWedge
 
                 if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("partial"))
                 {
-                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber} .");
+                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber} .");
                     status = ezcashResponse.CardStatus + $" {ezcashResponse.PartialPayPaidAmount}" + $" of {ezcashResponse.PartialPayTotal}";
                 }
                 else if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("voided"))
                 {
-                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
+                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
                     status = "SUCCESS";
                 }
                 else if (ezcashResponse != null)
                 {
-                    Logger.LogWithNoLock($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Error= {ezcashResponse.error},  Sending {ezcashResponse.CardStatus}.");
+                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Error= {ezcashResponse.error},  Sending {ezcashResponse.CardStatus}.");
                     status = ezcashResponse.CardStatus;
                 }
                 else
                 {
-                    Logger.LogWithNoLock($" Void is Failed for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending FAILED.");
+                    LogEvents($" Void is Failed for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending FAILED.");
                     status = "FAILED";
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at ProcessVoidCommand at Port {_portNumber}. Sending FAILED : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at ProcessVoidCommand at Port {_portNumber}. Sending FAILED : ", ex);
                 return status;
             }
 
@@ -392,7 +663,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at ProcessInquireCommand at Port {_portNumber}. Sending {status}: ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at ProcessInquireCommand at Port {_portNumber}. Sending {status}: ", ex);
                 return status;
             }
 
@@ -457,7 +728,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at SocketHandler.SendCallback at Port {_portNumber} .:", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at SocketHandler.SendCallback at Port {_portNumber} .:", ex);
             }
         }
 
@@ -479,7 +750,90 @@ namespace EZCashWedge
 
         private void LogEvents(string input)
         {
-            Logger.LogWithNoLock($"{input}");
+            Logger.LogWithNoLock($"{_type}{input}");
+        }
+    }
+
+    public class TestAPI
+    {
+
+        public bool GetRequest(string param, string endPoint, string token)
+        {
+            string responseBody = string.Empty;
+            var method = "";
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
+                    //client.Timeout = TimeSpan.FromSeconds(APITimeOut);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    method = endPoint + param;
+                    using (HttpResponseMessage response = client.GetAsync(method).Result)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            responseBody = response.Content.ReadAsStringAsync().Result;
+                            return true;
+
+                        }
+                        else
+                        {
+                            //MessageBox.Show($"Failure Code : {response.ReasonPhrase}", "Failure");
+                            return false;
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+
+
+        }
+
+        public T GetRequestNew<T>(string param, string endPoint, string token)
+        {
+            string responseBody = string.Empty;
+            var method = "";
+
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
+                    //client.Timeout = TimeSpan.FromSeconds(APITimeOut);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    method = endPoint + param;
+                    using (HttpResponseMessage response = client.GetAsync(method).Result)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            responseBody = response.Content.ReadAsStringAsync().Result;
+
+                            var result = JsonConvert.DeserializeObject<T>(responseBody);
+
+                            return result;
+
+                        }
+                        else
+                        {
+                            //MessageBox.Show($"Failure Code : {response.ReasonPhrase}", "Failure");
+                            return default;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                return default;
+            }
         }
     }
 }

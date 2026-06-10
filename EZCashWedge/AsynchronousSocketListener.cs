@@ -34,10 +34,13 @@ namespace EZCashWedge
         private ArrayList socketList;
         private int _portNumber;
         private string _yardId;
+        private readonly string wedgeType = ServiceConfiguration.GetFileLocation("WedgeType");
+        private string _type = string.Empty;
         public AsynchronousSocketListener(int portNumber, string yardId)
         {
             _portNumber = portNumber;
             _yardId = yardId;
+            _type = wedgeType == "0" ? $" Yard : {_yardId} " : $" Device : {_yardId}";
         }
 
 
@@ -49,46 +52,54 @@ namespace EZCashWedge
 
         public void StartListening()
         {
-            // Data buffer for incoming data.
-            byte[] bytes = new Byte[1024];
-
-
-            handlerList = new List<SocketHandler>();
-            socketList = new ArrayList();
-
-            IPAddress ipAddress = IPAddress.Parse(GetAppSettingValue("Ip"));
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, _portNumber);
-
-            // Create a TCP/IP socket.
-            Socket listener = new Socket(AddressFamily.InterNetwork,
-                SocketType.Stream, ProtocolType.Tcp);
-
-            // Bind the socket to the local endpoint and listen for incoming connections.
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(100);
-                LogEvents($" Listener created for Port '{_portNumber}'");
-                LogEvents($" Waiting for a connection at {_portNumber}...");
-                while (true)
+                // Data buffer for incoming data.
+                byte[] bytes = new Byte[1024];
+
+
+                handlerList = new List<SocketHandler>();
+                socketList = new ArrayList();
+
+                //IPAddress ipAddress = IPAddress.Parse(GetAppSettingValue("Ip"));
+                IPAddress ipAddress = IPAddress.Any; // Listens on 0.0.0.0 (all local network cards)
+                IPEndPoint localEndPoint = new IPEndPoint(ipAddress, _portNumber);
+
+                // Create a TCP/IP socket.
+                Socket listener = new Socket(AddressFamily.InterNetwork,
+                    SocketType.Stream, ProtocolType.Tcp);
+
+                // Bind the socket to the local endpoint and listen for incoming connections.
+                try
                 {
-                    // Set the event to nonsignaled state.
-                    allDone.Reset();
+                    listener.Bind(localEndPoint);
+                    listener.Listen(100);
+                    LogEvents($" Listener created for Port '{_portNumber}'");
+                    LogEvents($" Waiting for a connection at {_portNumber}...");
+                    while (true)
+                    {
+                        // Set the event to nonsignaled state.
+                        allDone.Reset();
 
-                    // Start an asynchronous socket to listen for connections.
+                        // Start an asynchronous socket to listen for connections.
 
-                    listener.BeginAccept(
-                        new AsyncCallback(AcceptCallback),
-                        listener);
+                        listener.BeginAccept(
+                            AcceptCallback,
+                            listener);
 
-                    // Wait until a connection is made before continuing.
-                    allDone.WaitOne();
+                        // Wait until a connection is made before continuing.
+                        allDone.WaitOne();
+                    }
+
                 }
-
+                catch (Exception ex)
+                {
+                    Logger.LogExceptionWithNoLock($" {_type} Exception at Inner AsynchronousSocketListener.StartListening for yard '{_yardId}' at port {_portNumber} : ", ex);
+                }
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.StartListening at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.StartListening for yard '{_yardId}' at port {_portNumber} : ", ex);
             }
         }
 
@@ -125,7 +136,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.AcceptCallback at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.AcceptCallback for yard '{_yardId}' at port {_portNumber} : ", ex);
             }
 
         }
@@ -145,7 +156,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.RemoveDisposedSocketOnNewConnection at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.RemoveDisposedSocketOnNewConnection at port {_portNumber} : ", ex);
             }
         }
         public async Task StopListener()
@@ -161,7 +172,7 @@ namespace EZCashWedge
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.StopListener at port {_portNumber} : ", ex);
+                        Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.StopListener at port {_portNumber} : ", ex);
                     }
 
                 }
@@ -174,7 +185,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.StopServer at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.StopServer at port {_portNumber} : ", ex);
             }
         }
 
@@ -227,7 +238,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.ReadCallback at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.ReadCallback at port {_portNumber} : ", ex);
             }
 
         }
@@ -245,7 +256,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.Send at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.Send at port {_portNumber} : ", ex);
             }
         }
 
@@ -273,13 +284,13 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock($" Exception at AsynchronousSocketListener.SendCallback at port {_portNumber} : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at AsynchronousSocketListener.SendCallback at port {_portNumber} : ", ex);
             }
         }
 
         private void LogEvents(string input)
         {
-            Logger.LogWithNoLock($"{input}");
+            Logger.LogWithNoLock($"{_type}{input}");
         }
     }
 }

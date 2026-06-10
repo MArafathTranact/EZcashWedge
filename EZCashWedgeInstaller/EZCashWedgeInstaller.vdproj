@@ -117,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C5FFBE6F94A44AEEAE81D3A017DE4F84"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_D17EAF298EE13D0AFD46B80CBF73FB95"
         "OwnerKey" = "8:_EAD3568A742788E3AF019A5165FBA69A"
         "MsmSig" = "8:_UNDEFINED"
@@ -185,6 +179,12 @@
         {
         "MsmKey" = "8:_EAD3568A742788E3AF019A5165FBA69A"
         "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB3B03972DE64BCE8280BC2919DBF82E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -355,21 +355,7 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_15D323E6031646DB883ED3965501567F"
-            {
-            "Name" = "8:Primary output from EZCashWedge (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_21155777E029438F9066F889C604888C"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_7D99DA99_78DB_4019_8554_4A5BB5B76B15"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_4D3B9062706643739A0A702E8E089363"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1C68C009635646FAA35B834125E6C54A"
             {
             "Name" = "8:Primary output from EZCashWedge (Active)"
             "Condition" = "8:"
@@ -379,7 +365,21 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_30CD1E86_F429_4E84_96D9_241F2493508B"
+            "Identifier" = "8:_A9C499F0_C99E_4229_95E3_02D2E7E3C3C4"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_336B2DD8BC32456988981215C9F9A802"
+            {
+            "Name" = "8:Primary output from EZCashWedge (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_21155777E029438F9066F889C604888C"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_31090D94_2C83_416F_8A3E_88CF80D5A9A3"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -747,26 +747,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C5FFBE6F94A44AEEAE81D3A017DE4F84"
-            {
-            "SourcePath" = "8:..\\EZCashWedgeConfigurator\\bin\\Release\\net9.0-windows\\publish\\win-x86\\EZCashWedgeConfigurator.exe"
-            "TargetName" = "8:EZCashWedgeConfigurator.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_C0F6D84BAF004F908FDAD806C527B511"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D17EAF298EE13D0AFD46B80CBF73FB95"
             {
             "AssemblyRegister" = "3:1"
@@ -891,6 +871,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB3B03972DE64BCE8280BC2919DBF82E"
+            {
+            "SourcePath" = "8:..\\EZCashWedgeConfigurator\\bin\\Release\\net9.0-windows\\publish\\win-x86\\EZCashWedgeConfigurator.exe"
+            "TargetName" = "8:EZCashWedgeConfigurator.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_C0F6D84BAF004F908FDAD806C527B511"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -947,15 +947,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EZCashWedgeInstaller"
-        "ProductCode" = "8:{096A0E43-6C06-49B6-8388-74C8438C2234}"
-        "PackageCode" = "8:{EF4C0854-150F-47A3-9D37-583E534CE2B9}"
+        "ProductCode" = "8:{2E896097-7239-4329-86A2-AC1D95593D24}"
+        "PackageCode" = "8:{20DFBF4F-B8A5-4AF4-807B-1442A6A31362}"
         "UpgradeCode" = "8:{7B107D48-6BA7-4E23-81A5-3E1C9F175697}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.7"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:Transact Payment Systems,Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
