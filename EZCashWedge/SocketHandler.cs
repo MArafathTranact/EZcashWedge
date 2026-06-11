@@ -86,7 +86,7 @@ namespace EZCashWedge
             }
             catch (Exception ex)
             {
-                Logger.LogExceptionWithNoLock(" {_type} Exception at GetDeviceInformation at Port {_portNumber} . : ", ex);
+                Logger.LogExceptionWithNoLock($" {_type} Exception at GetDeviceInformation at Port {_portNumber} . : ", ex);
             }
 
         }
@@ -461,7 +461,10 @@ namespace EZCashWedge
                 }
 
                 if (string.IsNullOrWhiteSpace(ezcashRequest.payment_nbr))
+                {
                     LogEvents($" No Payment Number in command at Port {_portNumber} .");
+                    return "FAIL";
+                }
 
 
                 var httpClient = new HttpClient
