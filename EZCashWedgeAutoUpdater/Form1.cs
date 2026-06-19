@@ -1063,6 +1063,7 @@ namespace EZCashWedgeAutoUpdater
                     string sourceFilePath = Path.Combine(TempPath, "EZCashWedge.exe.config");
                     if (File.Exists(sourceFilePath))
                     {
+                        // Captured as Dictionary<string, Dictionary<string, string>>
                         var existingConfigValue = ReadLocalConfigValue(sourceFilePath);
 
                         var copyResult = MoveExistingConfigValue(existingConfigValue, Path.Combine(configuration.ServiceInstallPath, "EZCashWedge.exe.config"));
@@ -1075,7 +1076,7 @@ namespace EZCashWedgeAutoUpdater
                         else
                         {
                             LogEvents($"EZCashWedge config file copy failed for service startup.");
-                            return true;
+                            return true; // Note: Kept your original logic return value here
                         }
                     }
                     else
@@ -1090,27 +1091,55 @@ namespace EZCashWedgeAutoUpdater
             }
         }
 
-        private Dictionary<string, string> ReadLocalConfigValue(string configFilePath)
+        private Dictionary<string, Dictionary<string, string>> ReadLocalConfigValue(string configFilePath)
         {
-            Dictionary<string, string> configValue = new Dictionary<string, string>();
+            // Format: [SectionName] -> [Key] -> [Value]
+            var configData = new Dictionary<string, Dictionary<string, string>>();
 
             try
             {
                 XDocument doc = XDocument.Load(configFilePath);
-                XElement appSettings = doc.Root.Element("appSettings");
+                if (doc.Root == null) return null;
 
-                if (appSettings != null)
+                // 1. Dynamic list of sections to read (always include appSettings by default)
+                List<string> sectionsToRead = new List<string> { "appSettings" };
+
+                // 2. Discover custom sections dynamically from <configSections>
+                XElement configSections = doc.Root.Element("configSections");
+                if (configSections != null)
                 {
-                    // Iterate through every <add> element automatically
-                    foreach (XElement element in appSettings.Elements("add"))
+                    foreach (XElement section in configSections.Elements("section"))
+                    {
+                        string sectionName = section.Attribute("name")?.Value;
+                        if (!string.IsNullOrEmpty(sectionName))
+                        {
+                            sectionsToRead.Add(sectionName);
+                        }
+                    }
+                }
+
+                // 3. Extract data for every discovered section
+                foreach (string sectionName in sectionsToRead)
+                {
+                    XElement sectionElement = doc.Root.Element(sectionName);
+                    if (sectionElement == null) continue;
+
+                    var sectionPairs = new Dictionary<string, string>();
+
+                    foreach (XElement element in sectionElement.Elements("add"))
                     {
                         string key = element.Attribute("key")?.Value;
                         string value = element.Attribute("value")?.Value;
 
-                        if (!string.IsNullOrEmpty(key) && !configValue.ContainsKey(key))
+                        if (!string.IsNullOrEmpty(key) && !sectionPairs.ContainsKey(key))
                         {
-                            configValue.Add(key, value);
+                            sectionPairs.Add(key, value);
                         }
+                    }
+
+                    if (sectionPairs.Count > 0)
+                    {
+                        configData.Add(sectionName, sectionPairs);
                     }
                 }
             }
@@ -1120,55 +1149,91 @@ namespace EZCashWedgeAutoUpdater
                 return null;
             }
 
-            return configValue;
+            return configData;
         }
 
-        private bool MoveExistingConfigValue(Dictionary<string, string> existingConfig, string currentConfigFilePath)
+        private bool MoveExistingConfigValue(Dictionary<string, Dictionary<string, string>> existingConfig, string currentConfigFilePath)
         {
-
             try
             {
-                if (!string.IsNullOrEmpty(currentConfigFilePath) && File.Exists(currentConfigFilePath))
-                {
-                    // Work in memory
-                    XDocument doc = XDocument.Load(currentConfigFilePath);
-                    XElement appSettings = doc.Root.Element("appSettings");
-                    if (appSettings == null)
-                    {
-                        appSettings = new XElement("appSettings");
-                        doc.Root.Add(appSettings);
-                    }
-
-                    if (existingConfig != null)
-                    {
-                        foreach (var item in existingConfig)
-                        {
-                            XElement setting = appSettings.Elements("add").FirstOrDefault(e => e.Attribute("key")?.Value == item.Key);
-
-                            if (setting != null)
-                            {
-                                setting.SetAttributeValue("value", item.Value);
-                            }
-
-                        }
-                        doc.Save(currentConfigFilePath);
-
-                    }
-                    return true;
-                }
-                else
+                if (string.IsNullOrEmpty(currentConfigFilePath) || !File.Exists(currentConfigFilePath))
                 {
                     LogEvents($"EZCashWedge config file not found in {currentConfigFilePath}.");
                     return false;
                 }
+
+                if (existingConfig == null || existingConfig.Count == 0) return true;
+
+                XDocument doc = XDocument.Load(currentConfigFilePath);
+                if (doc.Root == null) return false;
+
+                // Define which sections should be entirely replaced by source data
+                var structuralSections = new HashSet<string> { "yardIdSection", "deviceSection" };
+                bool isModified = false;
+
+                foreach (var sectionItem in existingConfig)
+                {
+                    string sectionName = sectionItem.Key;
+                    var sourceKeyValues = sectionItem.Value;
+
+                    // Strict Check: The section must already exist in the destination file
+                    XElement destinationSection = doc.Root.Element(sectionName);
+                    if (destinationSection == null) continue;
+
+                    // RULE 1: Handle custom hardware sections (yardIdSection, deviceSection)
+                    if (structuralSections.Contains(sectionName))
+                    {
+                        // Check if the source actually has real data (not just the XXXX placeholder)
+                        bool sourceHasRealData = sourceKeyValues.Any(kvp => kvp.Key != "XXXX" && kvp.Value != "XXXX");
+
+                        if (sourceHasRealData)
+                        {
+                            // Clear out everything inside the destination section (removes XXXX and comments)
+                            destinationSection.RemoveNodes();
+
+                            // Copy all valid pairs from source over to destination
+                            foreach (var kvp in sourceKeyValues)
+                            {
+                                destinationSection.Add(new XElement("add",
+                                    new XAttribute("key", kvp.Key),
+                                    new XAttribute("value", kvp.Value)));
+                            }
+                            isModified = true;
+                        }
+                    }
+                    // RULE 2: Handle standard appSettings (match exact keys)
+                    else if (sectionName == "appSettings")
+                    {
+                        foreach (var kvp in sourceKeyValues)
+                        {
+                            XElement destinationSetting = destinationSection.Elements("add")
+                                .FirstOrDefault(e => e.Attribute("key")?.Value == kvp.Key);
+
+                            if (destinationSetting != null)
+                            {
+                                if (destinationSetting.Attribute("value")?.Value != kvp.Value)
+                                {
+                                    destinationSetting.SetAttributeValue("value", kvp.Value);
+                                    isModified = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Only save changes if modifications actually occurred
+                if (isModified)
+                {
+                    doc.Save(currentConfigFilePath);
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
                 LogExceptions(" MoveExistingConfigValue() ", ex);
                 return false;
             }
-
-
         }
 
         private void CopyAutoUpdateConfigFile()
