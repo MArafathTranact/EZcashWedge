@@ -14,13 +14,14 @@ namespace EZCashWedge
         private CancellationTokenSource _serviceCts;
         private Task _socketTask;
         private Task _updateTask;
+        
         private readonly string _updateOnServiceStart = ServiceConfiguration.GetFileLocation("UpdateOnServiceStart");
 
 
         public Service1()
         {
-            InitializeComponent();
-            //ConnectSocketListener();
+            InitializeComponent();          
+            //ConnectSocketListener();          
         }
 
         protected override void OnStart(string[] args)
@@ -28,6 +29,8 @@ namespace EZCashWedge
             Logger.LogWithNoLock($" Service Started ");
             Logger.LogWithNoLock($" Version Number : 1.1.1");
             Logger.LogWithNoLock($" -------- Maximum file size for the log is 100 MB --------");
+            _serviceCts = new CancellationTokenSource();
+
             try
             {
 

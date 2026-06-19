@@ -16,25 +16,19 @@
         "Entry"
         {
         "MsmKey" = "8:_0E2FE420D74B5863A07FF8187F6ECEB0"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_1418B157A7DE88306B2DCBA472C3845D"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_21155777E029438F9066F889C604888C"
-        "OwnerKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_222B8C7EB1AC74FD462B4F6B59E2F157"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -46,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_2C70C876DE7D6558954F2A7E7A90B348"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,7 +52,7 @@
         "Entry"
         {
         "MsmKey" = "8:_4D18E27D604304501CA62D505DBF544A"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_6555B2942DC28B98181FF9EA3A73AF0A"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -82,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_845310582FF1086F7B3E0739ADA9A4EC"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -94,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_8725BB475888581E2FFB93343584FE8B"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,7 +100,7 @@
         "Entry"
         {
         "MsmKey" = "8:_9F953DD660A8F9EA465E7E63FE5FA39F"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -124,7 +118,7 @@
         "Entry"
         {
         "MsmKey" = "8:_BACF071644977561C0DC6F8C3D5F0A3B"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -136,7 +130,7 @@
         "Entry"
         {
         "MsmKey" = "8:_D17EAF298EE13D0AFD46B80CBF73FB95"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -154,7 +148,7 @@
         "Entry"
         {
         "MsmKey" = "8:_D1F68AED06E9AA55C3E08B24E999EA5B"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -171,6 +165,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D24384234A174255A7423CDF0534E557"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E9AA1B9D004B7A49118E4D90EDFF87EB"
         "OwnerKey" = "8:_D17EAF298EE13D0AFD46B80CBF73FB95"
         "MsmSig" = "8:_UNDEFINED"
@@ -178,7 +178,7 @@
         "Entry"
         {
         "MsmKey" = "8:_E9AA1B9D004B7A49118E4D90EDFF87EB"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,7 +190,7 @@
         "Entry"
         {
         "MsmKey" = "8:_EAD3568A742788E3AF019A5165FBA69A"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -202,7 +202,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_21155777E029438F9066F889C604888C"
+        "OwnerKey" = "8:_1418B157A7DE88306B2DCBA472C3845D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -289,12 +295,6 @@
         "OwnerKey" = "8:_B050FD9A7445117341AC24B170423403"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1418B157A7DE88306B2DCBA472C3845D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -367,31 +367,31 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1C68C009635646FAA35B834125E6C54A"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_00038BE6E5954179816960E6FC3F8722"
             {
             "Name" = "8:Primary output from EZCashWedge (Active)"
             "Condition" = "8:"
-            "Object" = "8:_21155777E029438F9066F889C604888C"
+            "Object" = "8:_D24384234A174255A7423CDF0534E557"
             "FileType" = "3:2"
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_A9C499F0_C99E_4229_95E3_02D2E7E3C3C4"
+            "Identifier" = "8:_332DCDD6_AF24_430C_BD81_7A650008A0D4"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_336B2DD8BC32456988981215C9F9A802"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_935477FD60A044049597297D79BDF130"
             {
             "Name" = "8:Primary output from EZCashWedge (Active)"
             "Condition" = "8:"
-            "Object" = "8:_21155777E029438F9066F889C604888C"
+            "Object" = "8:_D24384234A174255A7423CDF0534E557"
             "FileType" = "3:2"
             "InstallAction" = "3:4"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_31090D94_2C83_416F_8A3E_88CF80D5A9A3"
+            "Identifier" = "8:_0A6C88E2_63E1_4FA2_8CD5_7FE5438520B4"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -999,15 +999,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EZCashWedgeInstaller"
-        "ProductCode" = "8:{2E896097-7239-4329-86A2-AC1D95593D24}"
-        "PackageCode" = "8:{DE43BB24-3610-4842-B8E3-1F96C592AE0D}"
+        "ProductCode" = "8:{15C77305-BEEB-4783-963E-EF40E894480E}"
+        "PackageCode" = "8:{8A3D65E0-1486-4267-87F2-3906ADDC3630}"
         "UpgradeCode" = "8:{7B107D48-6BA7-4E23-81A5-3E1C9F175697}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.1.0"
+        "ProductVersion" = "8:1.1.1"
         "Manufacturer" = "8:Transact Payment Systems,Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1519,9 +1519,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_21155777E029438F9066F889C604888C"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D24384234A174255A7423CDF0534E557"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\EZCashWedge\\obj\\Release\\EZCashWedge.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C0F6D84BAF004F908FDAD806C527B511"

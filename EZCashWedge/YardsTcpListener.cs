@@ -94,8 +94,7 @@ namespace EZCashWedge
         public async void CreateListeners()
         {
             try
-            {
-                Thread.Sleep(10000);
+            {                
                 List<Task> tasks = new List<Task>();
                 var wedgeType = ServiceConfiguration.GetFileLocation("WedgeType");
 
