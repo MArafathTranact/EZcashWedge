@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationLoader.cs" />
     <Compile Include="ArchiveFileHook.cs" />
     <Compile Include="AsynchronousSocketListener.cs" />
     <Compile Include="EzCashAPIRequest.cs" />
