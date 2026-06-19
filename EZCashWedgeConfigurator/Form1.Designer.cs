@@ -30,8 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EZcashWedgeConfigurator));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             label6 = new Label();
             cbWedgeType = new ComboBox();
@@ -60,6 +60,8 @@
             tabPage2 = new TabPage();
             gbDevice = new GroupBox();
             dgDevices = new DataGridView();
+            label7 = new Label();
+            cbAutoUpdate = new CheckBox();
             groupBox1.SuspendLayout();
             tbwedgeType.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -73,6 +75,8 @@
             // groupBox1
             // 
             groupBox1.BackColor = Color.Transparent;
+            groupBox1.Controls.Add(cbAutoUpdate);
+            groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(cbWedgeType);
             groupBox1.Controls.Add(txtArchiveRollOutDays);
@@ -90,7 +94,7 @@
             groupBox1.ForeColor = SystemColors.HighlightText;
             groupBox1.Location = new Point(13, 14);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(422, 253);
+            groupBox1.Size = new Size(478, 281);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "EZcash";
@@ -98,7 +102,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(15, 154);
+            label6.Location = new Point(32, 154);
             label6.Name = "label6";
             label6.Size = new Size(89, 14);
             label6.TabIndex = 30;
@@ -109,7 +113,7 @@
             cbWedgeType.Enabled = false;
             cbWedgeType.Font = new Font("Verdana", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cbWedgeType.FormattingEnabled = true;
-            cbWedgeType.Location = new Point(205, 151);
+            cbWedgeType.Location = new Point(263, 151);
             cbWedgeType.Name = "cbWedgeType";
             cbWedgeType.Size = new Size(160, 22);
             cbWedgeType.TabIndex = 29;
@@ -120,7 +124,7 @@
             txtArchiveRollOutDays.Enabled = false;
             txtArchiveRollOutDays.Font = new Font("Verdana", 8.25F);
             txtArchiveRollOutDays.ForeColor = SystemColors.ActiveCaptionText;
-            txtArchiveRollOutDays.Location = new Point(205, 220);
+            txtArchiveRollOutDays.Location = new Point(263, 220);
             txtArchiveRollOutDays.Name = "txtArchiveRollOutDays";
             txtArchiveRollOutDays.Size = new Size(160, 21);
             txtArchiveRollOutDays.TabIndex = 28;
@@ -128,7 +132,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(15, 223);
+            label5.Location = new Point(32, 223);
             label5.Name = "label5";
             label5.Size = new Size(151, 14);
             label5.TabIndex = 27;
@@ -139,7 +143,7 @@
             txtTraceSize.Enabled = false;
             txtTraceSize.Font = new Font("Verdana", 8.25F);
             txtTraceSize.ForeColor = SystemColors.ActiveCaptionText;
-            txtTraceSize.Location = new Point(205, 187);
+            txtTraceSize.Location = new Point(263, 187);
             txtTraceSize.Name = "txtTraceSize";
             txtTraceSize.Size = new Size(160, 21);
             txtTraceSize.TabIndex = 26;
@@ -147,7 +151,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 190);
+            label4.Location = new Point(32, 190);
             label4.Name = "label4";
             label4.Size = new Size(35, 14);
             label4.TabIndex = 25;
@@ -158,7 +162,7 @@
             btnConnectEZCashAPI.Enabled = false;
             btnConnectEZCashAPI.Font = new Font("Verdana", 8F);
             btnConnectEZCashAPI.ForeColor = SystemColors.Desktop;
-            btnConnectEZCashAPI.Location = new Point(302, 119);
+            btnConnectEZCashAPI.Location = new Point(360, 119);
             btnConnectEZCashAPI.Name = "btnConnectEZCashAPI";
             btnConnectEZCashAPI.Size = new Size(65, 21);
             btnConnectEZCashAPI.TabIndex = 24;
@@ -171,7 +175,7 @@
             txtWedgeIp.Enabled = false;
             txtWedgeIp.Font = new Font("Verdana", 8.25F);
             txtWedgeIp.ForeColor = SystemColors.ActiveCaptionText;
-            txtWedgeIp.Location = new Point(205, 23);
+            txtWedgeIp.Location = new Point(263, 23);
             txtWedgeIp.Name = "txtWedgeIp";
             txtWedgeIp.Size = new Size(160, 21);
             txtWedgeIp.TabIndex = 17;
@@ -179,7 +183,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(15, 26);
+            label1.Location = new Point(32, 26);
             label1.Name = "label1";
             label1.Size = new Size(80, 14);
             label1.TabIndex = 16;
@@ -190,7 +194,7 @@
             txtEZCashToken.Enabled = false;
             txtEZCashToken.Font = new Font("Verdana", 8.25F);
             txtEZCashToken.ForeColor = SystemColors.ActiveCaptionText;
-            txtEZCashToken.Location = new Point(131, 92);
+            txtEZCashToken.Location = new Point(189, 92);
             txtEZCashToken.Name = "txtEZCashToken";
             txtEZCashToken.Size = new Size(234, 21);
             txtEZCashToken.TabIndex = 15;
@@ -198,7 +202,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 95);
+            label3.Location = new Point(32, 95);
             label3.Name = "label3";
             label3.Size = new Size(56, 14);
             label3.TabIndex = 14;
@@ -209,7 +213,7 @@
             txtEZCashAPI.Enabled = false;
             txtEZCashAPI.Font = new Font("Verdana", 8.25F);
             txtEZCashAPI.ForeColor = SystemColors.ActiveCaptionText;
-            txtEZCashAPI.Location = new Point(131, 56);
+            txtEZCashAPI.Location = new Point(189, 56);
             txtEZCashAPI.Name = "txtEZCashAPI";
             txtEZCashAPI.Size = new Size(234, 21);
             txtEZCashAPI.TabIndex = 13;
@@ -217,7 +221,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(15, 59);
+            label2.Location = new Point(32, 59);
             label2.Name = "label2";
             label2.Size = new Size(40, 14);
             label2.TabIndex = 12;
@@ -230,7 +234,7 @@
             btnSave.Enabled = false;
             btnSave.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSave.ForeColor = SystemColors.Desktop;
-            btnSave.Location = new Point(109, 457);
+            btnSave.Location = new Point(109, 487);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 30);
             btnSave.TabIndex = 2;
@@ -245,7 +249,7 @@
             btnCancel.BackColor = Color.Red;
             btnCancel.Cursor = Cursors.Hand;
             btnCancel.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancel.Location = new Point(208, 457);
+            btnCancel.Location = new Point(208, 487);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 30);
             btnCancel.TabIndex = 3;
@@ -261,7 +265,7 @@
             button1.BackgroundImageLayout = ImageLayout.Zoom;
             button1.Cursor = Cursors.Hand;
             button1.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.Location = new Point(309, 457);
+            button1.Location = new Point(309, 487);
             button1.Name = "button1";
             button1.Size = new Size(75, 30);
             button1.TabIndex = 4;
@@ -274,7 +278,7 @@
             tbwedgeType.Controls.Add(tabPage1);
             tbwedgeType.Controls.Add(tabPage2);
             tbwedgeType.ItemSize = new Size(1, 1);
-            tbwedgeType.Location = new Point(13, 270);
+            tbwedgeType.Location = new Point(13, 300);
             tbwedgeType.Name = "tbwedgeType";
             tbwedgeType.SelectedIndex = 0;
             tbwedgeType.Size = new Size(485, 176);
@@ -311,8 +315,8 @@
             dgYards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgYards.Location = new Point(11, 13);
             dgYards.Name = "dgYards";
-            dataGridViewCellStyle1.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle3;
             dgYards.Size = new Size(464, 147);
             dgYards.TabIndex = 0;
             // 
@@ -346,17 +350,35 @@
             dgDevices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgDevices.Location = new Point(11, 13);
             dgDevices.Name = "dgDevices";
-            dataGridViewCellStyle2.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgDevices.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgDevices.RowsDefaultCellStyle = dataGridViewCellStyle4;
             dgDevices.Size = new Size(464, 147);
             dgDevices.TabIndex = 0;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(32, 253);
+            label7.Name = "label7";
+            label7.Size = new Size(199, 14);
+            label7.TabIndex = 31;
+            label7.Text = "Auto Update on Service Start";
+            // 
+            // cbAutoUpdate
+            // 
+            cbAutoUpdate.AutoSize = true;
+            cbAutoUpdate.Location = new Point(263, 253);
+            cbAutoUpdate.Name = "cbAutoUpdate";
+            cbAutoUpdate.Size = new Size(15, 14);
+            cbAutoUpdate.TabIndex = 32;
+            cbAutoUpdate.UseVisualStyleBackColor = true;
             // 
             // EZcashWedgeConfigurator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightSlateGray;
-            ClientSize = new Size(505, 499);
+            ClientSize = new Size(505, 527);
             Controls.Add(tbwedgeType);
             Controls.Add(button1);
             Controls.Add(btnCancel);
@@ -409,5 +431,7 @@
         private DataGridView dgDevices;
         private GroupBox gbyard;
         private DataGridView dgYards;
+        private CheckBox cbAutoUpdate;
+        private Label label7;
     }
 }

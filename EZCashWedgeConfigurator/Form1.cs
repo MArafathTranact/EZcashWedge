@@ -290,6 +290,17 @@ namespace EZCashWedgeConfigurator
                         }));
                     }
 
+                    XElement UpdateOnServiceStart = appSettings.Elements("add").FirstOrDefault(e => e.Attribute("key")?.Value == "UpdateOnServiceStart");
+                    if (UpdateOnServiceStart != null)
+                    {
+                        cbAutoUpdate.BeginInvoke((Action)(() =>
+                        {
+                            cbAutoUpdate.Checked = UpdateOnServiceStart.Attribute("value")?.Value == "1";
+
+                        }));
+                    }
+
+
 
                     var yardItems = doc.Descendants("yardIdSection")
                             .Elements("add")
@@ -378,63 +389,6 @@ namespace EZCashWedgeConfigurator
             if (!validSave)
                 return;
 
-            //if (cbWedgeType.SelectedIndex == 0)
-            //{
-            //    if (yardList != null && yardList.Count == 0)
-            //    {
-
-            //        MessageBox.Show($"Provide Yard Information", "Warning");
-            //        return;
-
-            //    }
-            //    else if (yardList != null && yardList.Count > 0)
-            //    {
-            //        var valid = false;
-            //        foreach (var item in yardList)
-            //        {
-            //            if (!string.IsNullOrEmpty(item.YardId) && !string.IsNullOrEmpty(item.Port))
-            //            {
-            //                valid = true;
-            //            }
-
-            //        }
-            //        if (!valid)
-            //        {
-            //            MessageBox.Show($"Provide valid yard information");
-            //            return;
-            //        }
-            //    }
-
-            //}
-            //else
-            //{
-            //    if (deviceList != null && deviceList.Count == 0)
-            //    {
-
-            //        MessageBox.Show($"Provide Device Information", "Warning");
-            //        return;
-
-            //    }
-            //    else if (deviceList != null && deviceList.Count > 0)
-            //    {
-            //        var valid = false;
-            //        foreach (var item in deviceList)
-            //        {
-            //            if (!string.IsNullOrEmpty(item.DeviceId) && !string.IsNullOrEmpty(item.Port))
-            //            {
-            //                valid = true;
-            //            }
-
-            //        }
-            //        if (!valid)
-            //        {
-            //            MessageBox.Show($"Provide valid device information");
-            //            return;
-            //        }
-            //    }
-            //}
-
-
             string? encryptedEZCashToken;
 
             if (!string.IsNullOrEmpty(EZcashToken) && EZcashToken == txtEZCashToken.Text)
@@ -449,6 +403,7 @@ namespace EZCashWedgeConfigurator
             configValue.Add("TraceFileSize", txtTraceSize.Text.Trim());
             configValue.Add("DeleteArchived", txtArchiveRollOutDays.Text.Trim());
             configValue.Add("WedgeType", cbWedgeType.SelectedIndex.ToString());
+            configValue.Add("UpdateOnServiceStart", cbAutoUpdate.Checked ? "1" : "0");
 
             ModifyEZCashConfig(ConfigFilePath, configValue);
         }
