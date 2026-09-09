@@ -202,12 +202,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1418B157A7DE88306B2DCBA472C3845D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D24384234A174255A7423CDF0534E557"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -293,6 +287,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B050FD9A7445117341AC24B170423403"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1418B157A7DE88306B2DCBA472C3845D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -999,15 +999,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EZCashWedgeInstaller"
-        "ProductCode" = "8:{15C77305-BEEB-4783-963E-EF40E894480E}"
-        "PackageCode" = "8:{8A3D65E0-1486-4267-87F2-3906ADDC3630}"
+        "ProductCode" = "8:{D3CA33E9-B2F0-485D-8E6D-2D4794B9593C}"
+        "PackageCode" = "8:{18650FDE-3C3A-400A-B5A8-4277AE92A59D}"
         "UpgradeCode" = "8:{7B107D48-6BA7-4E23-81A5-3E1C9F175697}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.1.1"
+        "ProductVersion" = "8:1.1.2"
         "Manufacturer" = "8:Transact Payment Systems,Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1521,7 +1521,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D24384234A174255A7423CDF0534E557"
             {
-            "SourcePath" = "8:..\\EZCashWedge\\obj\\Release\\EZCashWedge.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C0F6D84BAF004F908FDAD806C527B511"

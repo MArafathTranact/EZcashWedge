@@ -186,6 +186,7 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Visible = false;
             btnCancel.ClientSizeChanged += btnCancel_Click;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnShowPassword
             // 

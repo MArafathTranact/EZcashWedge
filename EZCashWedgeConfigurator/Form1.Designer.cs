@@ -30,9 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EZcashWedgeConfigurator));
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
+            cbAutoUpdate = new CheckBox();
+            label7 = new Label();
             label6 = new Label();
             cbWedgeType = new ComboBox();
             txtArchiveRollOutDays = new TextBox();
@@ -51,7 +53,7 @@
             toolTipSaveConfiguration = new ToolTip(components);
             toolTipCancel = new ToolTip(components);
             toolTipTestAPI = new ToolTip(components);
-            button1 = new Button();
+            btnLoadConfig = new Button();
             toolTipOpenConfigFile = new ToolTip(components);
             tbwedgeType = new TabControl();
             tabPage1 = new TabPage();
@@ -60,8 +62,6 @@
             tabPage2 = new TabPage();
             gbDevice = new GroupBox();
             dgDevices = new DataGridView();
-            label7 = new Label();
-            cbAutoUpdate = new CheckBox();
             groupBox1.SuspendLayout();
             tbwedgeType.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -98,6 +98,24 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "EZcash";
+            // 
+            // cbAutoUpdate
+            // 
+            cbAutoUpdate.AutoSize = true;
+            cbAutoUpdate.Location = new Point(263, 253);
+            cbAutoUpdate.Name = "cbAutoUpdate";
+            cbAutoUpdate.Size = new Size(15, 14);
+            cbAutoUpdate.TabIndex = 32;
+            cbAutoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(32, 253);
+            label7.Name = "label7";
+            label7.Size = new Size(199, 14);
+            label7.TabIndex = 31;
+            label7.Text = "Auto Update on Service Start";
             // 
             // label6
             // 
@@ -258,20 +276,20 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
-            // button1
+            // btnLoadConfig
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = (Image)resources.GetObject("button1.BackgroundImage");
-            button1.BackgroundImageLayout = ImageLayout.Zoom;
-            button1.Cursor = Cursors.Hand;
-            button1.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.Location = new Point(309, 487);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 30);
-            button1.TabIndex = 4;
-            toolTipOpenConfigFile.SetToolTip(button1, "Load EZCashWedge.exe.config file");
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
+            btnLoadConfig.BackColor = Color.Transparent;
+            btnLoadConfig.BackgroundImage = (Image)resources.GetObject("btnLoadConfig.BackgroundImage");
+            btnLoadConfig.BackgroundImageLayout = ImageLayout.Zoom;
+            btnLoadConfig.Cursor = Cursors.Hand;
+            btnLoadConfig.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLoadConfig.Location = new Point(309, 487);
+            btnLoadConfig.Name = "btnLoadConfig";
+            btnLoadConfig.Size = new Size(75, 30);
+            btnLoadConfig.TabIndex = 4;
+            toolTipOpenConfigFile.SetToolTip(btnLoadConfig, "Load EZCashWedge.exe.config file");
+            btnLoadConfig.UseVisualStyleBackColor = false;
+            btnLoadConfig.Click += btnLoadConfig_Click;
             // 
             // tbwedgeType
             // 
@@ -315,18 +333,18 @@
             dgYards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgYards.Location = new Point(11, 13);
             dgYards.Name = "dgYards";
-            dataGridViewCellStyle3.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgYards.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dgYards.Size = new Size(464, 147);
             dgYards.TabIndex = 0;
             // 
             // tabPage2
             // 
             tabPage2.Controls.Add(gbDevice);
-            tabPage2.Location = new Point(4, 5);
+            tabPage2.Location = new Point(4, 54);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(477, 167);
+            tabPage2.Size = new Size(477, 118);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Device";
             tabPage2.UseVisualStyleBackColor = true;
@@ -350,28 +368,10 @@
             dgDevices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgDevices.Location = new Point(11, 13);
             dgDevices.Name = "dgDevices";
-            dataGridViewCellStyle4.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgDevices.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgDevices.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dgDevices.Size = new Size(464, 147);
             dgDevices.TabIndex = 0;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(32, 253);
-            label7.Name = "label7";
-            label7.Size = new Size(199, 14);
-            label7.TabIndex = 31;
-            label7.Text = "Auto Update on Service Start";
-            // 
-            // cbAutoUpdate
-            // 
-            cbAutoUpdate.AutoSize = true;
-            cbAutoUpdate.Location = new Point(263, 253);
-            cbAutoUpdate.Name = "cbAutoUpdate";
-            cbAutoUpdate.Size = new Size(15, 14);
-            cbAutoUpdate.TabIndex = 32;
-            cbAutoUpdate.UseVisualStyleBackColor = true;
             // 
             // EZcashWedgeConfigurator
             // 
@@ -380,7 +380,7 @@
             BackColor = Color.LightSlateGray;
             ClientSize = new Size(505, 527);
             Controls.Add(tbwedgeType);
-            Controls.Add(button1);
+            Controls.Add(btnLoadConfig);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(groupBox1);
@@ -416,7 +416,7 @@
         private ToolTip toolTipSaveConfiguration;
         private ToolTip toolTipCancel;
         private ToolTip toolTipTestAPI;
-        private Button button1;
+        private Button btnLoadConfig;
         private ToolTip toolTipOpenConfigFile;
         private TextBox txtArchiveRollOutDays;
         private Label label5;
