@@ -131,6 +131,9 @@ namespace EZCashWedgeConfigurator
 
                 if (events != null && events.Any())
                 {
+                    if (eventList != null)
+                        eventList.Clear();
+
                     foreach (var item in events)
                     {
                         eventList.Add(new Events { title = item.title, yard_id = item.yard_id });
@@ -161,6 +164,9 @@ namespace EZCashWedgeConfigurator
 
                 if (devices != null && devices.Any())
                 {
+                    if (devList != null)
+                        devList.Clear();
+
                     foreach (var device in devices)
                     {
                         devList.Add(new Device { dev_id = device.dev_id, description = device.description, display = $"{device.dev_id}-{device.description}" });
@@ -623,7 +629,7 @@ namespace EZCashWedgeConfigurator
 
                         foreach (var yard in yardList)
                         {
-                            if (!string.IsNullOrEmpty(yard.Port_nbr.Trim()) && !string.IsNullOrEmpty(yard.YardId))
+                            if (!string.IsNullOrEmpty(yard.Port_nbr.Trim()))
                                 yardSection.Add(new XElement("add",
                                     new XAttribute("key", yard.Port_nbr.Trim() ?? string.Empty),
                                     new XAttribute("value", yard.YardId.Trim() ?? string.Empty)
@@ -646,7 +652,7 @@ namespace EZCashWedgeConfigurator
 
                         foreach (var device in deviceList)
                         {
-                            if (!string.IsNullOrEmpty(device.Port.Trim()) && !string.IsNullOrEmpty(device.DeviceId))
+                            if (!string.IsNullOrEmpty(device.Port.Trim()))
                                 deviceSection.Add(new XElement("add",
                                     new XAttribute("key", device.Port.Trim() ?? string.Empty),
                                     new XAttribute("value", device.DeviceId.Trim())
