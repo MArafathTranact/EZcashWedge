@@ -449,11 +449,9 @@ namespace EZCashWedgeAutoUpdater
                                         await Task.Delay(1500);
                                         Application.Exit();
                                     }
-                                    CopyAutoUpdateConfigFile();
                                 }
                                 else
                                 {
-                                    CopyAutoUpdateConfigFile();
                                     DisplayProgress("Error in copying EZCash config file.\nManual interuption needed.");
                                     LogEvents($"\"Error in copying EZCash config file.Manual interuption needed.");
                                     await Task.Delay(1500);
@@ -505,9 +503,11 @@ namespace EZCashWedgeAutoUpdater
                     Application.Exit();
                 }
 
+                CopyAutoUpdateConfigFile();
             }
             else
             {
+                CopyAutoUpdateConfigFile();
                 DisplayProgress($"Closing the application.");
                 LogEvents($"Closing the application.");
                 await Task.Delay(1500);
@@ -739,6 +739,8 @@ namespace EZCashWedgeAutoUpdater
 
                 LogEvents($"Verifying local version with azure version...");
 
+                DisplayProgress($"Verifying local version with azure version...");
+                await Task.Delay(2000);
                 if (File.Exists(localautoUpdatefilePath))
                 {
                     string fileContent = File.ReadAllText(localautoUpdatefilePath);
@@ -833,34 +835,12 @@ namespace EZCashWedgeAutoUpdater
                                 }
                                 else if (azureResult < localResult)
                                 {
-                                    if (configuration != null && !configuration.ActiveInstallation)
-                                    {
-                                        return updateRresponse;
-                                    }
-                                    else
-                                    {
-                                        LogEvents($"Prompting confirmation to continue update.");
-                                        DialogResult result = MessageBox.Show(
-                                                                  $"Lower Version {azureServiceVersion} available for download.\nDo you want to downgrade the service?",   // Message text
-                                                                  "Confirmation",              // Title of the MessageBox
-                                                                  MessageBoxButtons.OKCancel,  // Buttons to display
-                                                                  MessageBoxIcon.Question      // Icon (optional)
-                                                              );
-
-                                        if (result == DialogResult.OK)
-                                        {
-                                            LogEvents($"Ok selected to continue the downgrade process.");
-
-                                            return updateRresponse;
-                                        }
-                                        else
-                                        {
-                                            LogEvents($"Cancel selected.Cancelling the update process.");
-                                            updateRresponse.Status = false;
-                                            updateRresponse.Error = $"Cancelling the update process.";
-                                            return updateRresponse;
-                                        }
-                                    }
+                                    LogEvents($"Lower Version {azureServiceVersion} is available for download.No updates needed.");
+                                    DisplayProgress($"Lower version {azureServiceVersion} is available for download.\nNo updates needed.");
+                                    updateRresponse.Status = false;
+                                    updateRresponse.Error = $"Lower version {azureServiceVersion} is available for download.\nNo updates needed.";
+                                    await Task.Delay(2000);
+                                    return updateRresponse;
                                 }
                                 return updateRresponse;
                             }
@@ -887,6 +867,41 @@ namespace EZCashWedgeAutoUpdater
                 }
                 else
                 {
+
+                    var version = GetInstalledAppVersion("EZCashWedgeInstaller");
+
+                    if (!string.IsNullOrEmpty(version))
+                    {
+                        Version localResult = new(version);
+                        Version azureResult = new(azureAutoUpdate.Version);
+
+                        if (azureResult < localResult)
+                        {
+
+                            LogEvents($"Lower Version {azureServiceVersion} is available for download.No updates needed.");
+                            DisplayProgress($"Lower version {azureServiceVersion} is available for download.\nNo updates needed.");
+                            updateRresponse.Status = false;
+                            updateRresponse.Error = $"Lower version {azureServiceVersion} is available for download.\nNo updates needed.";
+                            await Task.Delay(2000);
+                            return updateRresponse;
+                        }
+                        else if (azureResult == localResult)
+                        {
+                            LogEvents($"Service version {localServiceVersion} is already up to date.No updates needed.");
+                            DisplayProgress($"Your service version {localServiceVersion} is already up to date.\nNo updates needed.");
+                            updateRresponse.Status = false;
+                            updateRresponse.Error = $"Service version {localServiceVersion} is already up to date.\nNo updates needed.";
+                            return updateRresponse;
+                        }
+                    }
+                    else
+                    {
+                        LogEvents($"Local version not available. Continuing update process");
+                        DisplayProgress($"Local version not available.\nContinuing update process.");
+                        await Task.Delay(2000);
+                    }
+
+
                     if (configuration != null && !configuration.ActiveInstallation)
                     {
                         return updateRresponse;
@@ -924,6 +939,58 @@ namespace EZCashWedgeAutoUpdater
                 return updateRresponse;
 
             }
+        }
+
+        public static string GetInstalledAppVersion(string appName)
+        {
+            // Registry paths where Control Panel looks for installed software
+            string[] registryKeys = new string[]
+            {
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+            @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+            };
+
+            // Check HKEY_LOCAL_MACHINE (Machine-wide installs)
+            string version = SearchRegistryHive(RegistryHive.LocalMachine, registryKeys, appName);
+            if (version != null) return version;
+
+            // Check HKEY_CURRENT_USER (Per-user installs)
+            version = SearchRegistryHive(RegistryHive.CurrentUser, registryKeys, appName);
+            return version;
+        }
+
+        private static string SearchRegistryHive(RegistryHive hive, string[] keyPaths, string appName)
+        {
+            using (var baseKey = RegistryKey.OpenBaseKey(hive, RegistryView.Registry64))
+            {
+                foreach (var keyPath in keyPaths)
+                {
+                    using (var uninstallKey = baseKey.OpenSubKey(keyPath))
+                    {
+                        if (uninstallKey == null) continue;
+
+                        foreach (var subkeyName in uninstallKey.GetSubKeyNames())
+                        {
+                            using (var appKey = uninstallKey.OpenSubKey(subkeyName))
+                            {
+                                if (appKey == null) continue;
+
+                                var displayName = appKey.GetValue("DisplayName") as string;
+                                var displayVersion = appKey.GetValue("DisplayVersion") as string;
+
+                                // Case-insensitive partial match for the application name
+                                if (!string.IsNullOrEmpty(displayName) &&
+                                    displayName.IndexOf(appName, StringComparison.OrdinalIgnoreCase) >= 0)
+                                {
+                                    return displayVersion ?? "Unknown Version";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         private bool GetLocalAutoUpdateConfig()
