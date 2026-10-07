@@ -27,7 +27,7 @@ namespace EZCashWedge
         protected override void OnStart(string[] args)
         {
             Logger.LogWithNoLock($" Service Started ");
-            Logger.LogWithNoLock($" Version Number : 1.1.2");
+            Logger.LogWithNoLock($" Version Number : 1.1.3");
             Logger.LogWithNoLock($" -------- Maximum file size for the log is 100 MB --------");
             _serviceCts = new CancellationTokenSource();
 

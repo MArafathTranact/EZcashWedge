@@ -999,15 +999,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EZCashWedgeInstaller"
-        "ProductCode" = "8:{D3CA33E9-B2F0-485D-8E6D-2D4794B9593C}"
-        "PackageCode" = "8:{18650FDE-3C3A-400A-B5A8-4277AE92A59D}"
+        "ProductCode" = "8:{428FC2F5-DD63-4D7F-A091-DF1D9E51E5F0}"
+        "PackageCode" = "8:{C3A2119A-6170-4FDA-B89E-541F94F9D3CE}"
         "UpgradeCode" = "8:{7B107D48-6BA7-4E23-81A5-3E1C9F175697}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.1.2"
+        "ProductVersion" = "8:1.1.3"
         "Manufacturer" = "8:Transact Payment Systems,Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1521,7 +1521,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D24384234A174255A7423CDF0534E557"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\EZCashWedge\\obj\\Release\\EZCashWedge.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C0F6D84BAF004F908FDAD806C527B511"
