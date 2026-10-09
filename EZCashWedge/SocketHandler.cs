@@ -176,9 +176,31 @@ namespace EZCashWedge
             }
             else
             {
-                LogEvents($" Entering barcode decoding at Port {_portNumber} ..");
-                response = await ProcessBarcodeDecodingCommand(command, request);
-                SendNonWebResponse(handler, response, true);
+                if (!string.IsNullOrEmpty(command) && (command == "void" || command == "inquire"))
+                {
+                    _yardId = _encodeyardId;
+                    switch (command)
+                    {
+                        case "void":
+                            LogEvents($" Entering void at Port {_portNumber} ..");
+                            response = await ProcessVoidCommand(command, request);
+                            SendNonWebResponse(handler, response, true);
+                            break;
+                        case "inquire":
+                            LogEvents($" Entering inquire at Port {_portNumber} ..");
+                            response = await ProcessInquireCommand(command, request);
+                            SendNonWebResponse(handler, response, false);
+                            break;
+                    }
+                }
+                else
+                {
+                    LogEvents($" Entering barcode decoding at Port {_portNumber} ..");
+                    response = await ProcessBarcodeDecodingCommand(command, request);
+                    SendNonWebResponse(handler, response, true);
+                }
+
+
             }
         }
 
@@ -566,13 +588,15 @@ namespace EZCashWedge
 
                 if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("partial"))
                 {
-                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber} .");
+
                     status = ezcashResponse.CardStatus + $" {ezcashResponse.PartialPayPaidAmount}" + $" of {ezcashResponse.PartialPayTotal}";
+                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Status : {status}");
                 }
                 else if (ezcashResponse != null && ezcashResponse.CardStatus.ToLower().Contains("voided"))
                 {
-                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Sending {ezcashResponse.CardStatus}.");
+                    LogEvents($" Success Void API call for Payment Number '{ezcashRequest.payment_nbr}' at Port {_portNumber}. Status {ezcashResponse.CardStatus}.");
                     status = "SUCCESS";
+                    LogEvents($" Sending {status}.");
                 }
                 else if (ezcashResponse != null)
                 {
